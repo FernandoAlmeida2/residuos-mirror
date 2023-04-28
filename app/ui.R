@@ -17,15 +17,8 @@ box::use(
     monospace_font,
     primary
   ],
-  ./view/cartoes_basicos,
-  ./view/cartoes_api,
-  ./view/cartoes_abas,
-  ./view/cartoes_organizaveis,
-  ./view/cartoes_descritivos,
-  ./view/cartoes_valor,
-  ./view/cores,
-  ./view/galeria_1,
-  ./view/galeria_2
+  ./view/coleta_em_mapas,
+  ./view/residometro
 )
 
 #' @export
@@ -44,7 +37,7 @@ ui <- dashboardPage(
   scrollToTop = TRUE,
   header = dashboardHeader(
     title = dashboardBrand(
-      title = "Título",
+      title = "OBSR",
       color = "primary",
       href = "https://observatoriodefortaleza.fortaleza.ce.gov.br/",
       image = "logo.png",
@@ -57,21 +50,7 @@ ui <- dashboardPage(
     skin = "light",
     status = "primary",
     id = "sidebar",
-    customArea = fluidRow(
-      actionButton(
-        inputId = "myAppButton",
-        label = NULL,
-        icon = icon("users"),
-        width = NULL,
-        status = "primary",
-        style = "margin: auto",
-        dashboardBadge(textOutput("btnVal"), color = "danger")
-      )
-    ),
-    sidebarUserPanel(
-      image = "https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png",
-      name = "Bem Vindo!"
-    ),
+    collapsed = TRUE,
     sidebarMenu(
       id = "current_tab",
       flat = FALSE,
@@ -79,8 +58,13 @@ ui <- dashboardPage(
       childIndent = TRUE,
       menuItem(
         "Residômetro",
-        tabName = "cartoes",
-        icon = icon("sliders")
+        tabName = "residometro",
+        icon = icon("trash-restore")
+      ),
+      menuItem(
+        "Coleta em Mapas",
+        tabName = "coleta_em_mapas",
+        icon = icon("map-marked")
       )
     )
   ),
@@ -111,40 +95,16 @@ ui <- dashboardPage(
     ),
     tabItems(
       tabItem(
-        tabName = "cartoes",
-        cartoes_basicos$ui("cartoes_basicos")
+        tabName = "residometro",
+        residometro$ui("residometro")
       ),
       tabItem(
-        tabName = "cartoes_api",
-        cartoes_api$ui("cartoes_api")
+        tabName = "coleta_em_mapas",
+        coleta_em_mapas$ui("coleta_em_mapas")
       ),
       tabItem(
-        tabName = "cartoes_com_abas",
-        cartoes_abas$ui("cartoes_abas")
-      ),
-      tabItem(
-        tabName = "sortablecards",
-        cartoes_organizaveis$ui("cartoes_organizaveis")
-      ),
-      tabItem(
-        tabName = "statsboxes",
-        cartoes_descritivos$ui("cartoes_descritivos")
-      ),
-      tabItem(
-        tabName = "valueboxes",
-        cartoes_valor$ui("cartoes_valor")
-      ),
-      tabItem(
-        tabName = "colors",
-        cores$ui("cores")
-      ),
-      tabItem(
-        tabName = "gallery1",
-        galeria_1$ui("galeria_1")
-      ),
-      tabItem(
-        tabName = "gallery2",
-        galeria_2$ui("galeria_2")
+        tabName = "canais_de_comunicacao",
+        residometro$ui("canais_comunicacao")
       )
     )
   ),
@@ -153,7 +113,7 @@ ui <- dashboardPage(
     skin = "light",
     pinned = TRUE,
     overlay = FALSE,
-    cartoes_basicos$ui("teste")
+    "Filtros"
   ),
   footer = dashboardFooter(
     fixed = FALSE,
@@ -203,5 +163,5 @@ ui <- dashboardPage(
       )
     )
   ),
-  title = "Modelo de Dashboard da DIOBS"
+  title = "Observatório de Resíduos de Fortaleza"
 )

@@ -54,3 +54,58 @@
 .list-group > p {
     font-family: 'Roboto', sans-serif;
 }
+
+/* Cabeçalhos */
+h1 {
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+h1:before,
+h1:after {
+    background-color: #333;
+    content: "";
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 50%;
+}
+h1:before {
+    right: 0.5em;
+    margin-left: -50%;
+}
+h1:after {
+    left: 0.5em;
+    margin-right: -50%;
+}
+
+/* Cabeçalhos */
+h2 {
+    overflow: hidden;
+    text-align: left;
+}
+h2:before,
+h2:after {
+    background-color: #333;
+    content: "";
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 100%;
+}
+h2:before {
+    right: 0.5em;
+    margin-left: -100%;
+}
+h2:after {
+    left: 0.5em;
+    margin-right: -100%;
+}
+
+
+#coleta_em_mapas-mapa {
+    height: calc(100vh - 140px) !important;
+}
+

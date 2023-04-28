@@ -1,5 +1,3 @@
-renv::refresh()
-
 shiny::shinyAppDir(
   ".",
   options = list(

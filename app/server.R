@@ -5,15 +5,8 @@ box::use(
 
 box::use(
   ./mod/notification[notify],
-  ./view/cartoes_basicos,
-  ./view/cartoes_api,
-  ./view/cartoes_abas,
-  ./view/cartoes_organizaveis,
-  ./view/cartoes_descritivos,
-  ./view/cartoes_valor,
-  ./view/cores,
-  ./view/galeria_1,
-  ./view/galeria_2
+  ./view/coleta_em_mapas,
+  ./view/residometro
 )
 
 #' @export
@@ -56,13 +49,6 @@ server <- function(input, output, session) {
   #########################
   ## Inicializa as views ##
   #########################
-  cartoes_basicos$server("cartoes_basicos")
-  ## cartoes_api$server("cartoes_api")
-  ## cartoes_abas$server("cartoes_abas")
-  ## cartoes_organizaveis$server("cartoes_organizaveis")
-  ## cartoes_descritivos$server("cartoes_descritivos")
-  ## cartoes_valor$server("cartoes_valor")
-  ## cores$server("cores")
-  ## galeria_1$server("galeria_1")
-  ## galeria_2$server("galeria_2")
+  residometro$server("residometro")
+  coleta_em_mapas$server("coleta_em_mapas")
 }
