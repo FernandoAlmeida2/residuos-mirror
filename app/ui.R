@@ -18,6 +18,7 @@ box::use(
     primary
   ],
   ./view/coleta_em_mapas,
+  ./view/reciclometro,
   ./view/residometro
 )
 
@@ -108,8 +109,8 @@ ui <- dashboardPage(
         coleta_em_mapas$ui("coleta_em_mapas")
       ),
       tabItem(
-        tabName = "canais_de_comunicacao",
-        residometro$ui("canais_comunicacao")
+        tabName = "reciclometro",
+        reciclometro$ui("reciclometro")
       )
     )
   ),

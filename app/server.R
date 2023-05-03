@@ -6,6 +6,7 @@ box::use(
 box::use(
   ./mod/notification[notify],
   ./view/coleta_em_mapas,
+  ./view/reciclometro,
   ./view/residometro
 )
 
@@ -49,6 +50,7 @@ server <- function(input, output, session) {
   #########################
   ## Inicializa as views ##
   #########################
-  residometro$server("residometro")
   coleta_em_mapas$server("coleta_em_mapas")
+  reciclometro$server("reciclometro")
+  residometro$server("residometro")
 }

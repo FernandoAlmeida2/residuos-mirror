@@ -81,6 +81,8 @@ server <- function(id) {
 
     limite_municipal <- sf$st_read(obsr, layer = "br_iplanfor_limites_fortaleza")
     ecopontos <- sf$st_read(obsr, layer = "br_iplanfor_ecopontos")
+    eventos_amc <- readr::read_delim("data/trash-events.csv") %>%
+      sf$st_as_sf(coords = c("longitude", "latitude"))
     
     center_latitude <- -3.7773324
     center_longitude <- -38.5367587
@@ -115,13 +117,33 @@ server <- function(id) {
             feature.id = FALSE
           )
         ) %>%
+        leaflet$addCircleMarkers(
+          data = eventos_amc,
+          fillColor = "#ff0000",
+          fillOpacity = 0.8,
+          stroke = FALSE,
+          group = "Eventos de Câmera",
+          popup = leafpop$popupTable(
+            sf$st_drop_geometry(
+              eventos_amc %>%
+                select(address, updated_at, total) %>%
+                rename(
+                  Local = address,
+                  `Atualizado em` = updated_at,
+                  `Total de ocorrências` = total)
+            ),
+            row.numbers = FALSE,
+            feature.id = FALSE
+          )
+        ) %>%
         # Layers control
         leaflet$addLayersControl(
           ##baseGroups = c("OSM (default)", "Toner", "Toner Lite"),
-          overlayGroups = c("Ecopontos"),
+          overlayGroups = c("Ecopontos", "Eventos de Câmera"),
           options = leaflet$layersControlOptions(collapsed = FALSE)
         ) %>%
-        leaflet$hideGroup("Ecopontos")
+        leaflet$hideGroup("Ecopontos") %>%
+        leaflet$hideGroup("Eventos de Câmera")
 
     })
 
