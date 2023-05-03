@@ -16,6 +16,10 @@ box::use(
   utils[as.roman]
 )
 
+box::use(
+  ../mod/database[obsr]
+)
+
 # Internal auxiliar functions
 to_ton <- function(x) { x/1000 }
 br_format <- scales::label_comma(accuracy = 1, big.mark = ".", decimal.mark = ",")
@@ -23,7 +27,7 @@ br_format <- scales::label_comma(accuracy = 1, big.mark = ".", decimal.mark = ",
 update_data <- function(obsr, year) {
   today <- Sys.Date()
   curr_day  <- lubridate::mday(today)
-  tblname <- sprintf("relatorio_pesagem_%s", year)
+  tblname <- sprintf("br_acfor_relatorio_pesagem_%04d", year)
 
   dplyr::tbl(obsr, tblname) %>%
     collect %>%
@@ -150,7 +154,10 @@ ui <- function(id) {
 
   tagList(
     tabBox(
-      title = p(class="text-uppercase font-weight-bold", "Residômetro"),
+      title = p(
+        class="text-uppercase font-weight-bold",
+        sprintf("Residômetro (Ano Base: %04d)", lubridate::year(Sys.Date()))
+      ),
       elevation = 2,
       id = "residometro",
       width = 12,
@@ -173,220 +180,7 @@ ui <- function(id) {
         aba_residometro(ns, "anual")
       )
     )
-  )
-  
-  ## fluidPage(
-  ##   h1("Residômetro"),
-  ##   h2("Diário"),
-  ##   fluidRow(
-  ##     valueBox(
-  ##       value = textOutput(ns("residometro_diario_total")),
-  ##       subtitle = "Total",
-  ##       color = "primary",
-  ##       icon = icon("trash"),
-  ##       width = 2
-  ##     ),
-  ##     valueBox(
-  ##       value = textOutput(ns("residometro_diario_total_coleta_domiciliar")),
-  ##       subtitle = "Coleta Domiciliar",
-  ##       color = "secondary",
-  ##       icon = icon("trash"),
-  ##       width = 2
-  ##     ),
-  ##     valueBox(
-  ##       value =  textOutput(ns("residometro_diario_total_especial_urbana")),
-  ##       subtitle = "Coleta Especial Urbana",
-  ##       color = "secondary",
-  ##       icon = icon("trash"),
-  ##       width = 2
-  ##     ),
-  ##     valueBox(
-  ##       value = textOutput(ns("residometro_diario_total_podacao")),
-  ##       subtitle = "Poda",
-  ##       color = "secondary",
-  ##       icon = icon("trash"),
-  ##       width = 2
-  ##     ),
-  ##     valueBox(
-  ##       value = textOutput(ns("residometro_diario_total_entulho")),
-  ##       subtitle = "Entulho",
-  ##       color = "secondary",
-  ##       icon = icon("trash"),
-  ##       width = 2
-  ##     ),
-  ##     valueBox(
-  ##       value = textOutput(ns("residometro_diario_total_coleta_seletiva")),
-  ##       subtitle = "Coleta Seletiva",
-  ##       color = "secondary",
-  ##       icon = icon("trash"),
-  ##       width = 2
-  ##     )
-  ##   ),
-  ##   fluidRow(
-  ##     box(
-  ##       title = "Peso líquido por regional (t)", 
-  ##       elevation = 4,
-  ##       closable = FALSE, 
-  ##       width = 6,
-  ##       solidHeader = TRUE, 
-  ##       status = "secondary",
-  ##       collapsible = FALSE,
-  ##       echarts4rOutput(ns("residometro_diario_regional"))
-  ##     ),
-  ##     box(
-  ##       title = "Peso líquido por território (t)", 
-  ##       elevation = 4,
-  ##       closable = FALSE, 
-  ##       width = 6,
-  ##       solidHeader = TRUE, 
-  ##       status = "secondary",
-  ##       collapsible = FALSE,
-  ##       echarts4rOutput(ns("residometro_diario_territorio"))
-  ##     )
-  ##   ),
-  ##   h2("Mensal"),
-  ##   fluidRow(
-  ##     column(
-  ##       width = 3,
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_mensal_total")),
-  ##         subtitle = "Total",
-  ##         color = "primary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_mensal_total_coleta_domiciliar")),
-  ##         subtitle = "Coleta Domiciliar",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_mensal_total_especial_urbana")),
-  ##         subtitle = "Coleta Especial Urbana",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_mensal_total_podacao")),
-  ##         subtitle = "Poda",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_mensal_total_entulho")),
-  ##         subtitle = "Entulho",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_mensal_total_coleta_seletiva")),
-  ##         subtitle = "Coleta Seletiva",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       )
-  ##     ),
-  ##     column(
-  ##       width = 9,
-  ##       box(
-  ##         title = "Peso líquido por regional", 
-  ##         elevation = 4,
-  ##         closable = FALSE, 
-  ##         width = 12,
-  ##         solidHeader = TRUE, 
-  ##         status = "secondary",
-  ##         collapsible = FALSE,
-  ##         echarts4rOutput(ns("residometro_mensal_regional"))
-  ##       ),
-  ##       box(
-  ##         title = "Peso líquido por território", 
-  ##         elevation = 4,
-  ##         closable = FALSE, 
-  ##         width = 12,
-  ##         solidHeader = TRUE, 
-  ##         status = "secondary",
-  ##         collapsible = FALSE,
-  ##         echarts4rOutput(ns("residometro_mensal_territorio"))
-  ##       )
-  ##     )
-  ##   ),
-  ##   h2("Anual"),
-  ##   fluidRow(
-  ##     column(
-  ##       width = 3,
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_anual_total")),
-  ##         subtitle = "Total",
-  ##         color = "primary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_anual_total_coleta_domiciliar")),
-  ##         subtitle = "Coleta Domiciliar",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_anual_total_especial_urbana")),
-  ##         subtitle = "Coleta Especial Urbana",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_anual_total_podacao")),
-  ##         subtitle = "Poda",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_anual_total_entulho")),
-  ##         subtitle = "Entulho",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       ),
-  ##       valueBox(
-  ##         value = textOutput(ns("residometro_anual_total_coleta_seletiva")),
-  ##         subtitle = "Coleta Seletiva",
-  ##         color = "secondary",
-  ##         icon = icon("trash"),
-  ##         width = 12
-  ##       )
-  ##     ),
-  ##     column(
-  ##       width = 9,
-  ##       box(
-  ##         title = "Peso líquido por regional", 
-  ##         elevation = 4,
-  ##         closable = FALSE, 
-  ##         width = 12,
-  ##         solidHeader = TRUE, 
-  ##         status = "secondary",
-  ##         collapsible = FALSE,
-  ##         echarts4rOutput(ns("residometro_anual_regional"))
-  ##       ),
-  ##       box(
-  ##         title = "Peso líquido por território", 
-  ##         elevation = 4,
-  ##         closable = FALSE, 
-  ##         width = 12,
-  ##         solidHeader = TRUE, 
-  ##         status = "secondary",
-  ##         collapsible = FALSE,
-  ##         echarts4rOutput(ns("residometro_anual_territorio"))
-  ##       )
-  ##     )
-  ##   )
-  ## )
+  )  
 }
 
 #' @export
@@ -394,22 +188,11 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     
     today <- Sys.Date()
-    curr_year <- 2022 # lubridate::year(today)
-    curr_month <- lubridate::month(today)
-    curr_day  <- lubridate::mday(today)
+    curr_year <- lubridate::year(today)
+    curr_month <- lubridate::month(today) - 2
+    curr_day  <- lubridate::mday(today) - 2
     timeout_ms <- 5000 # Timeout for refresh daily data
-    curr_year_tblname <- sprintf("relatorio_pesagem_%s", curr_year)
-
-    obsr <- pool::dbPool(
-      RPostgres::Postgres(),
-      dbname = "obsr",
-      host = "0.0.0.0",
-      user = "postgres",
-      password = "changeme"
-    )
-    onStop(function() {
-      pool::poolClose(obsr)
-    })
+    curr_year_tblname <- sprintf("br_acfor_relatorio_pesagem_%04d", curr_year)
 
     pesagem_anual <- dplyr::tbl(obsr, curr_year_tblname) %>%
       collect %>%

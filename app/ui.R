@@ -57,6 +57,11 @@ ui <- dashboardPage(
       compact = FALSE,
       childIndent = TRUE,
       menuItem(
+        "Reciclômetro",
+        tabName = "reciclometro",
+        icon = icon("recycle")
+      ),
+      menuItem(
         "Residômetro",
         tabName = "residometro",
         icon = icon("trash-restore")

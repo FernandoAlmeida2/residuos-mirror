@@ -22,7 +22,9 @@ box::use(
   ggplot2[stat_sf_coordinates],
   stats[rnorm,runif],
   readxl,
+  utils[as.roman],
   leaflet,
+  leafpop,
   magrittr[`%>%`],
   shiny[
     selectInput,  
@@ -45,15 +47,18 @@ box::use(
 )
 
 box::use(
-  ../mod/readKMZ[readKMZ]
+  ../mod/database[obsr]
 )
+
 
 #' @export
 ui <- function(id) {  
   ns <- NS(id)
 
   tagList(
-    withSpinner(
+    shinycssloaders::withSpinner(
+      type = 8,
+      color = "#0e2e45",
       leaflet$leafletOutput(ns("mapa"))
     )
   )
@@ -74,19 +79,9 @@ ui <- function(id) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
 
-    shp_ftz <- sf$st_read('data/divisao_bairros_fortaleza/limite_de_bairro_de_fortaleza.shp',
-                          options = 'ENCODING=latin-1',
-                          stringsAsFactors = FALSE) %>%
-      rename(Bairro = bairro) %>%
-      mutate(Bairro = case_when(
-        Bairro == 'Tauape' ~ 'São João do Tauape',
-        Bairro == 'Ellery' ~ 'Vila Ellery',
-        Bairro == 'Engenheiro Luciano Cavalcante' ~ 'Luciano Cavalcante',
-        Bairro == 'Manoel Sátiro' ~ 'Vila Manoel Sátiro',
-        Bairro == 'Boa Vista/Castelão' ~ 'Boa Vista',
-        TRUE ~ as.character(Bairro))) %>%
-      sf$st_transform('+proj=longlat +datum=WGS84')
-
+    limite_municipal <- sf$st_read(obsr, layer = "br_iplanfor_limites_fortaleza")
+    ecopontos <- sf$st_read(obsr, layer = "br_iplanfor_ecopontos")
+    
     center_latitude <- -3.7773324
     center_longitude <- -38.5367587
     output$mapa <- leaflet$renderLeaflet({
@@ -98,13 +93,35 @@ server <- function(id) {
           zoom = 12.3
         ) %>%
         leaflet$addPolygons(
-          data = shp_ftz,
-          color = "#444444",
+          data = limite_municipal,
+          color = "#69995D",
           weight = 1,
           smoothFactor = 0.5,
-          opacity = 1.0,
+          opacity = 0.5,
           fillOpacity = 0.5
-        )
+        ) %>%
+        leaflet$addMarkers(
+          data = ecopontos,
+          group = "Ecopontos",
+          popup = leafpop$popupTable(
+            sf$st_drop_geometry(
+              ecopontos %>%
+                select(nome, situacao) %>%
+                rename(
+                  Nome = nome,
+                  `Situação` = situacao)
+            ),
+            row.numbers = FALSE,
+            feature.id = FALSE
+          )
+        ) %>%
+        # Layers control
+        leaflet$addLayersControl(
+          ##baseGroups = c("OSM (default)", "Toner", "Toner Lite"),
+          overlayGroups = c("Ecopontos"),
+          options = leaflet$layersControlOptions(collapsed = FALSE)
+        ) %>%
+        leaflet$hideGroup("Ecopontos")
 
     })
 
