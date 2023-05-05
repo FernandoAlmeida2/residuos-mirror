@@ -17,12 +17,13 @@ box::use(
 )
 
 box::use(
-  ../mod/database[obsr]
+  ../mod/database[obsr],
+  ../mod/utils[...]
 )
 
 # Internal auxiliar functions
-to_ton <- function(x) { x/1000 }
-br_format <- scales::label_comma(accuracy = 1, big.mark = ".", decimal.mark = ",")
+## to_ton <- function(x) { x/1000 }
+## br_format <- scales::label_comma(accuracy = 1, big.mark = ".", decimal.mark = ",")
 
 update_data <- function(obsr, year) {
   today <- Sys.Date()
