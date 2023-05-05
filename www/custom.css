@@ -13,7 +13,8 @@
     border-radius: 0 0 1rem 1rem !important;
 }
 .small-box > .inner {
-    font-size: 2.125rem;
+    /* font-size: 2.125rem; */
+    font-size: 1.9rem;
     font-weight: 900;
 }
 .small-box > .inner > p{
@@ -109,3 +110,6 @@ h2:after {
     height: calc(100vh - 140px) !important;
 }
 
+/* .small-box > .inner { */
+/*     font-size: 1.9rem !important; */
+/* } */

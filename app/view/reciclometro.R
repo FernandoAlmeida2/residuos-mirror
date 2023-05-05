@@ -242,9 +242,11 @@ server <- function(id) {
         filter(tipo == "ENTULHO") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
+
+      perc <- 100*total_entulho/total
       
-      sprintf("%s t (%s%%)", br_format(total_entulho),
-              br_format(100*total_entulho/total))
+      sprintf("%s t (%s)", br_format(total_entulho),
+              perc_format(perc))
     })
 
     output$reciclometro_diario_total_volumoso <- renderText({
@@ -257,9 +259,11 @@ server <- function(id) {
         filter(tipo == "VOLUMOSO") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
+
+      perc <- 100*total_volumoso/total
       
-      sprintf("%s t (%s%%)", br_format(total_volumoso),
-              br_format(100*total_volumoso/total))
+      sprintf("%s t (%s)", br_format(total_volumoso),
+              perc_format(perc))
     })
 
     
@@ -273,9 +277,11 @@ server <- function(id) {
         filter(tipo == "METAL") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
+
+      perc <- 100*total_metal/total
       
-      sprintf("%s t (%s%%)", br_format(total_metal),
-              br_format(100*total_metal/total))
+      sprintf("%s t (%s)", br_format(total_metal),
+              perc_format(perc))
     })
 
     output$reciclometro_diario_total_papel <- renderText({
@@ -288,9 +294,10 @@ server <- function(id) {
         filter(tipo %in% c("PAPEL", "VIDRO", "PLÁSTICO")) %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_papel),
-              br_format(100*total_papel/total))
+
+      perc <- 100*total_papel/total
+      sprintf("%s t (%s)", br_format(total_papel),
+              perc_format(perc))
     })
 
     output$reciclometro_diario_total_oleo <- renderText({
@@ -303,9 +310,10 @@ server <- function(id) {
         filter(tipo %in% c("ÓLEO")) %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_papel),
-              br_format(100*total_papel/total))
+
+      perc <- 100*total_papel/total
+      sprintf("%s t (%s)", br_format(total_papel),
+              perc_format(perc))
     })
 
     output$reciclometro_diario_regional <- renderEcharts4r({
@@ -320,8 +328,12 @@ server <- function(id) {
       
       res %>%
         dplyr::inner_join(y, by = c("ecoponto" = "nome")) %>%
+        dplyr::arrange(-peso_total) %>%
+        mutate(
+          regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
+        ) %>%
         e_chart(regional) %>% 
-        e_bar(peso_total,  stack = "grp") %>%
+        e_bar(peso_total) %>%
         format_bar_plot
     })
 
@@ -331,6 +343,7 @@ server <- function(id) {
         group_by(ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
+        dplyr::arrange(-peso_total) %>%
         e_chart(ecoponto) %>% 
         e_bar(peso_total) %>%
         format_bar_plot
@@ -358,9 +371,10 @@ server <- function(id) {
         filter(tipo == "ENTULHO") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_entulho),
-              br_format(100*total_entulho/total))
+
+      perc <- 100*total_entulho/total
+      sprintf("%s t (%s)", br_format(total_entulho),
+              perc_format(perc))
     })
 
     output$reciclometro_mensal_total_volumoso <- renderText({
@@ -373,9 +387,10 @@ server <- function(id) {
         filter(tipo == "VOLUMOSO") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_volumoso),
-              br_format(100*total_volumoso/total))
+
+      perc <- 100*total_volumoso/total
+      sprintf("%s t (%s)", br_format(total_volumoso),
+              perc_format(perc))
     })
 
     
@@ -389,9 +404,10 @@ server <- function(id) {
         filter(tipo == "METAL") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_metal),
-              br_format(100*total_metal/total))
+
+      perc <- 100*total_metal/total
+      sprintf("%s t (%s)", br_format(total_metal),
+              perc_format(perc))
     })
 
     output$reciclometro_mensal_total_papel <- renderText({
@@ -404,9 +420,10 @@ server <- function(id) {
         filter(tipo %in% c("PAPEL", "VIDRO", "PLÁSTICO")) %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_papel),
-              br_format(100*total_papel/total))
+
+      perc <- 100*total_papel/total
+      sprintf("%s t (%s)", br_format(total_papel),
+              perc_format(perc))
     })
 
     output$reciclometro_mensal_total_oleo <- renderText({
@@ -419,9 +436,10 @@ server <- function(id) {
         filter(tipo %in% c("ÓLEO")) %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_papel),
-              br_format(100*total_papel/total))
+
+      perc <- 100*total_papel/total
+      sprintf("%s t (%s)", br_format(total_papel),
+              perc_format(perc))
     })
 
     output$reciclometro_mensal_regional <- renderEcharts4r({
@@ -436,6 +454,10 @@ server <- function(id) {
       
       res %>%
         dplyr::inner_join(y, by = c("ecoponto" = "nome")) %>%
+        dplyr::arrange(-peso_total) %>%
+        mutate(
+          regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
+        ) %>%
         e_chart(regional) %>% 
         e_bar(peso_total) %>%
         format_bar_plot
@@ -447,6 +469,7 @@ server <- function(id) {
         group_by(ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
+        dplyr::arrange(-peso_total) %>%
         e_chart(ecoponto) %>% 
         e_bar(peso_total) %>%
         format_bar_plot
@@ -474,9 +497,10 @@ server <- function(id) {
         filter(tipo == "ENTULHO") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_entulho),
-              br_format(100*total_entulho/total))
+
+      perc <- 100*total_entulho/total
+      sprintf("%s t (%s)", br_format(total_entulho),
+              perc_format(perc))
     })
 
     output$reciclometro_anual_total_volumoso <- renderText({
@@ -489,9 +513,10 @@ server <- function(id) {
         filter(tipo == "VOLUMOSO") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_volumoso),
-              br_format(100*total_volumoso/total))
+
+      perc <- 100*total_volumoso/total
+      sprintf("%s t (%s)", br_format(total_volumoso),
+              perc_format(perc))
     })
 
     
@@ -505,9 +530,9 @@ server <- function(id) {
         filter(tipo == "METAL") %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_metal),
-              br_format(100*total_metal/total))
+      perc <- 100*total_metal/total
+      sprintf("%s t (%s)", br_format(total_metal),
+              perc_format(perc))
     })
 
     output$reciclometro_anual_total_papel <- renderText({
@@ -520,9 +545,9 @@ server <- function(id) {
         filter(tipo %in% c("PAPEL", "VIDRO", "PLÁSTICO")) %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_papel),
-              br_format(100*total_papel/total))
+      perc <- 100*total_papel/total
+      sprintf("%s t (%s)", br_format(total_papel),
+              perc_format(perc))
     })
 
     output$reciclometro_anual_total_oleo <- renderText({
@@ -535,9 +560,10 @@ server <- function(id) {
         filter(tipo %in% c("ÓLEO")) %>%
         pull(quantidade_kg) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_papel),
-              br_format(100*total_papel/total))
+
+      perc <- 100*total_papel/total
+      sprintf("%s t (%s)", br_format(total_papel),
+              perc_format(perc))
     })
 
     output$reciclometro_anual_regional <- renderEcharts4r({
@@ -552,6 +578,10 @@ server <- function(id) {
       
       res %>%
         dplyr::inner_join(y, by = c("ecoponto" = "nome")) %>%
+        dplyr::arrange(-peso_total) %>%
+        mutate(
+          regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
+        ) %>%
         e_chart(regional) %>% 
         e_bar(peso_total) %>%
         format_bar_plot
@@ -563,6 +593,7 @@ server <- function(id) {
         group_by(ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
+        dplyr::arrange(-peso_total) %>%
         e_chart(ecoponto) %>% 
         e_bar(peso_total) %>%
         format_bar_plot

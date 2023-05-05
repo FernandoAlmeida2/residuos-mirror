@@ -45,11 +45,11 @@ filtra_regional <- function (x) {
   x %>%
     filter(stringr::str_detect(regional, "^SER")) %>%
     mutate(
-      regional = sprintf("SR%02d",  as.integer(as.roman(stringr::str_trim(gsub("SER", "", regional)))))
-    ) %>%
-    mutate(
-      regional = factor(regional, levels = )
-    )
+      regional = sprintf("SR %02d",  as.integer(as.roman(stringr::str_trim(gsub("SER", "", regional)))))
+    )##  %>%
+  ## mutate(
+  ##   regional = factor(regional, levels = )
+  ## )
 }
 
 format_bar_plot <- function(x) {
@@ -145,7 +145,26 @@ aba_residometro <- function(ns, x) {
           echarts4rOutput(ns(sprintf("residometro_%s_territorio", x)))
         )
       )
-    )
+    ),
+    if (x == "anual") {
+      fluidRow(
+        box(
+          title = "Peso líquido total em toneladas (série histórica)",
+          elevation = 4,
+          closable = FALSE,
+          width = 12,
+          solidHeader = TRUE,
+          status = "primary",
+          collapsible = FALSE,
+          shinycssloaders::withSpinner(
+            type = 8,
+            color = "#0e2e45",
+            echarts4rOutput(ns("residometro_anual_heatmap"))
+          )          
+          
+        )        
+      )
+    }
   )
 }
 
@@ -242,9 +261,10 @@ server <- function(id) {
         filter(material == "DOMICILIAR") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-        sprintf("%s t (%s%%)", br_format(total_domiciliar),
-                br_format(100*total_domiciliar/total))
+
+      perc <- 100*total_domiciliar/total
+      sprintf("%s t (%s)", br_format(total_domiciliar),
+              perc_format(perc))
     })
 
     output$residometro_diario_total_especial_urbana <- renderText({
@@ -257,8 +277,9 @@ server <- function(id) {
         filter(material %in% c("ESPECIAL URBANA", "LIXO ESPECIAL URBANA", "LIXO ESPECIAL URBANA - MECANIZADA")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-          
-      sprintf("%s t (%s%%)", br_format(total_ceu), br_format(100*total_ceu/total))
+
+      perc <- 100*total_ceu/total
+      sprintf("%s t (%s)", br_format(total_ceu), perc_format(perc))
     })
 
     
@@ -272,8 +293,9 @@ server <- function(id) {
         filter(material %in% c("CAPINA", "PODAÇÃO")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_podacao), br_format(100*total_podacao/total))
+
+      perc <- 100*total_podacao/total
+      sprintf("%s t (%s)", br_format(total_podacao), perc_format(perc))
     })
 
     output$residometro_diario_total_entulho <- renderText({
@@ -286,8 +308,9 @@ server <- function(id) {
         filter(material == "ENTULHO") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_entulho), br_format(100*total_entulho/total))
+
+      perc <- 100*total_entulho/total
+      sprintf("%s t (%s)", br_format(total_entulho), perc_format(perc))
     })
 
     output$residometro_diario_total_coleta_seletiva <- renderText({
@@ -302,8 +325,7 @@ server <- function(id) {
         sum %>% to_ton
 
       perc <- 100*total_seletiva/total
-      
-      sprintf("%s t (%s%%)", br_format(total_seletiva), if (perc < 1) "< 1" else br_format(perc))
+      sprintf("%s t (%s)", br_format(total_seletiva), perc_format(perc))
     })
 
     output$residometro_diario_regional <- renderEcharts4r({
@@ -311,7 +333,7 @@ server <- function(id) {
         filtra_regional %>%
         group_by(regional) %>% 
         summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>% 
-        arrange(regional) %>%
+        arrange(-peso_liquido_total) %>%
         e_chart(regional) %>% 
         e_bar(peso_liquido_total) %>%
         format_bar_plot
@@ -319,9 +341,10 @@ server <- function(id) {
 
     output$residometro_diario_territorio <- renderEcharts4r({
       dados$pesagem_diaria %>%
+        filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
         group_by(zgl) %>% 
-        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>% 
-        arrange(zgl) %>%
+        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
+        arrange(-peso_liquido_total) %>%
         e_chart(zgl) %>% 
         e_bar(peso_liquido_total) %>%
         format_bar_plot
@@ -350,9 +373,10 @@ server <- function(id) {
         filter(material == "DOMICILIAR") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-          
+
+      perc <- 100*total_domiciliar/total
       sprintf("%s t (%s%%)", br_format(total_domiciliar),
-              br_format(100*total_domiciliar/total))
+              perc_format(perc))
     })
 
     output$residometro_mensal_total_especial_urbana <- renderText({
@@ -365,8 +389,9 @@ server <- function(id) {
         filter(material %in% c("ESPECIAL URBANA", "LIXO ESPECIAL URBANA", "LIXO ESPECIAL URBANA - MECANIZADA")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_ceu), br_format(100*total_ceu/total))
+
+      perc <- 100*total_ceu/total
+      sprintf("%s t (%s)", br_format(total_ceu), perc_format(perc))
     })
 
     
@@ -380,8 +405,9 @@ server <- function(id) {
         filter(material %in% c("CAPINA", "PODAÇÃO")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_podacao), br_format(100*total_podacao/total))
+
+      perc <- 100*total_podacao/total
+      sprintf("%s t (%s)", br_format(total_podacao), perc_format(perc))
     })
 
     output$residometro_mensal_total_entulho <- renderText({
@@ -394,8 +420,9 @@ server <- function(id) {
         filter(material == "ENTULHO") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_entulho), br_format(100*total_entulho/total))
+
+      perc <- 100*total_entulho/total
+      sprintf("%s t (%s)", br_format(total_entulho), perc_format(perc))
     })
 
     output$residometro_mensal_total_coleta_seletiva <- renderText({
@@ -411,7 +438,7 @@ server <- function(id) {
 
       perc <- 100*total_seletiva/total
       
-      sprintf("%s t (%s%%)", br_format(total_seletiva), if (perc < 1) "< 1" else br_format(perc))
+      sprintf("%s t (%s)", br_format(total_seletiva), perc_format(perc))
     })
 
 
@@ -420,7 +447,7 @@ server <- function(id) {
         filtra_regional %>%
         group_by(regional) %>% 
         summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(regional) %>%
+        arrange(-peso_liquido_total) %>%
         e_chart(regional) %>% 
         e_bar(peso_liquido_total) %>% 
         format_bar_plot
@@ -428,9 +455,10 @@ server <- function(id) {
 
     output$residometro_mensal_territorio <- renderEcharts4r({
       pesagem_mensal %>%
+        filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
         group_by(zgl) %>% 
         summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(zgl) %>%
+        arrange(-peso_liquido_total) %>%
         e_chart(zgl) %>% 
         e_bar(peso_liquido_total) %>%
         format_bar_plot
@@ -473,8 +501,9 @@ server <- function(id) {
         filter(material %in% c("ESPECIAL URBANA", "LIXO ESPECIAL URBANA", "LIXO ESPECIAL URBANA - MECANIZADA")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_ceu), br_format(100*total_ceu/total))
+
+      perc <- 100*total_ceu/total
+      sprintf("%s t (%s)", br_format(total_ceu), perc_format(perc))
     })
 
     
@@ -488,8 +517,9 @@ server <- function(id) {
         filter(material %in% c("CAPINA", "PODAÇÃO")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_podacao), br_format(100*total_podacao/total))
+
+      perc <- 100*total_podacao/total
+      sprintf("%s t (%s)", br_format(total_podacao), perc_format(perc))
     })
 
     output$residometro_anual_total_entulho <- renderText({
@@ -502,8 +532,9 @@ server <- function(id) {
         filter(material == "ENTULHO") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-      
-      sprintf("%s t (%s%%)", br_format(total_entulho), br_format(100*total_entulho/total))
+
+      perc <- 100*total_entulho/total
+      sprintf("%s t (%s)", br_format(total_entulho), perc_format(perc))
     })
 
     output$residometro_anual_total_coleta_seletiva <- renderText({
@@ -518,8 +549,7 @@ server <- function(id) {
         sum %>% to_ton
 
       perc <- 100*total_seletiva/total
-      
-      sprintf("%s t (%s%%)", br_format(total_seletiva), if (perc < 1) "< 1" else br_format(perc))
+      sprintf("%s t (%s)", br_format(total_seletiva), perc_format(perc))
     })
 
     output$residometro_anual_regional <- renderEcharts4r({
@@ -527,7 +557,7 @@ server <- function(id) {
         filtra_regional %>%
         group_by(regional) %>% 
         summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(regional) %>%
+        arrange(-peso_liquido_total) %>%
         e_chart(regional) %>% 
         e_bar(peso_liquido_total) %>%
         format_bar_plot
@@ -535,15 +565,14 @@ server <- function(id) {
 
     output$residometro_anual_territorio <- renderEcharts4r({
       pesagem_anual %>%
+        filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
         group_by(zgl) %>% 
         summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(zgl) %>%
+        arrange(-peso_liquido_total) %>%
         e_chart(zgl) %>% 
         e_bar(peso_liquido_total) %>% 
         format_bar_plot
     })
-
-
 
 
     ## output$residometro_peso_placa <- renderEcharts4r({
@@ -559,23 +588,29 @@ server <- function(id) {
 
     ## })
 
-    ## output$residometro_peso_ano_heatmap <- renderEcharts4r({
-    ##   dplyr::tbl(obsr, "relatorio_pesagem_2022") %>%
-    ##     collect %>%
-    ##     mutate(
-    ##       dia = as.integer(substring(data_saida, 1, 2)),
-    ##       mes = as.integer(substring(data_saida, 4, 5)),
-    ##       ano = as.integer(substring(data_saida, 7, 10)),
-    ##       peso_liquido = as.numeric(peso_liquido),
-    ##       data_saida = as.Date(data_saida, "%d/%m/%Y")
-    ##     ) %>%
-    ##     group_by(data_saida) %>%
-    ##     summarise(total = sum(peso_liquido)/100000) %>%
-    ##     e_charts(data_saida) %>%
-    ##     e_calendar(range = "2022") %>%
-    ##     e_heatmap(total, coord_system = "calendar") %>%
-    ##     e_visual_map(max = 30)          
-    ## })
+    output$residometro_anual_heatmap <- renderEcharts4r({
+      res <- pesagem_anual %>%
+        mutate(
+          data_saida = as.Date(data_saida, "%d/%m/%Y")
+        ) %>%
+        group_by(data_saida) %>%
+        summarise(total = to_ton(sum(peso_liquido)))
+
+      
+      min_val <- res %>%
+        pull(total) %>%
+        min
+
+      max_val <- res %>%
+        pull(total) %>%
+        max
+
+      res %>%
+        e_charts(data_saida) %>%
+        e_calendar(range = curr_year) %>%
+        e_heatmap(total, coord_system = "calendar") %>%
+        e_visual_map(min = min_val, max = max_val)
+    })
     
   }) # End Server
 }
