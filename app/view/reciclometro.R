@@ -129,6 +129,34 @@ aba_reciclometro <- function(ns, x) {
           color = "#0e2e45",
           echarts4rOutput(ns(sprintf("reciclometro_%s_ecoponto", x)))
         )
+      ),
+      box(
+        title = "Valor total por regional (R$)", 
+        elevation = 4,
+        closable = FALSE, 
+        width = 12,
+        solidHeader = TRUE, 
+        status = "primary",
+        collapsible = FALSE,
+        shinycssloaders::withSpinner(
+          type = 8,
+          color = "#0e2e45",
+          echarts4rOutput(ns(sprintf("reciclometro_%s_vl_regional", x)))
+        )
+      ),
+      box(
+        title = "Valor total por ecoponto (R$)", 
+        elevation = 4,
+        closable = FALSE, 
+        width = 12,
+        solidHeader = TRUE, 
+        status = "primary",
+        collapsible = FALSE,
+        shinycssloaders::withSpinner(
+          type = 8,
+          color = "#0e2e45",
+          echarts4rOutput(ns(sprintf("reciclometro_%s_vl_ecoponto", x)))
+        )
       )
     )
   )
@@ -144,7 +172,7 @@ ui <- function(id) {
         title = "Total coletado por tipo de resíduo (t)", 
         elevation = 4,
         closable = FALSE, 
-        width = 6,
+        width = 12,
         solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
@@ -158,7 +186,7 @@ ui <- function(id) {
         title = "Total coletado por regional (t)", 
         elevation = 4,
         closable = FALSE, 
-        width = 6,
+        width = 12,
         solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
@@ -221,6 +249,89 @@ ui <- function(id) {
   
 }
 
+grafico_regional <- function(df) {
+  df %>%
+    group_by(tipo) %>%
+    e_chart(regional) %>%
+    e_bar(peso_total, stack="grp") %>%
+    e_tooltip(
+      formatter = htmlwidgets::JS("
+                                            function(params) {
+                                                  return '<span>'
+                                                          + params.value[0] + '<br/>'
+                                                        + params.seriesName + '<br/>'
+                                                        + parseFloat(params.value[1]).toLocaleString('pt-BR')
+                                                      + ' t'
+                                                      + '</span>';
+                                          }"
+                                  )
+    ) %>%
+    e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
+    e_legend(show = TRUE) %>%
+    e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
+}
+
+grafico_vl_regional <- function(df) {
+  df %>%
+    group_by(tipo) %>%
+    e_chart(regional) %>%
+    e_bar(vl_total, stack="grp") %>%
+    e_tooltip(
+      formatter = htmlwidgets::JS("
+                                            function(params) {
+                                                  return '<span>'
+                                                          + params.value[0] + '<br/>'
+                                                        + params.seriesName + '<br/>'
+                                                        + 'R$ ' + parseFloat(params.value[1]).toLocaleString('pt-BR')
+                                                      + '</span>';
+                                          }"
+                                  )
+    ) %>%
+    e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
+    e_legend(show = TRUE) %>%
+    e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
+}
+
+grafico_vl_ecoponto <- function(df) {
+  df %>%
+    e_chart(ecoponto) %>% 
+    e_bar(vl_total, stack="grp") %>%
+    e_tooltip(
+      formatter = htmlwidgets::JS("
+                                            function(params) {
+                                                  return '<span>'
+                                                          + params.value[0] + '<br/>'
+                                                        + params.seriesName + '<br/>'
+                                                        + 'R$  ' + parseFloat(params.value[1]).toLocaleString('pt-BR')
+                                                      + '</span>';
+                                          }"
+                                  )
+    ) %>%
+    e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
+    e_legend(show = TRUE) %>%
+    e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
+}
+
+grafico_ecoponto <- function(df) {
+  df %>%
+    e_chart(ecoponto) %>% 
+    e_bar(peso_total, stack="grp") %>%
+    e_tooltip(
+      formatter = htmlwidgets::JS("
+                                            function(params) {
+                                                  return '<span>'
+                                                          + params.value[0] + '<br/>'
+                                                        + params.seriesName + '<br/>'
+                                                        + parseFloat(params.value[1]).toLocaleString('pt-BR')
+                                                      + ' t'
+                                                      + '</span>';
+                                          }"
+                                  )
+    ) %>%
+    e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
+    e_legend(show = TRUE) %>%
+    e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
+}
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
@@ -300,7 +411,7 @@ server <- function(id) {
 
       perc <- 100*total_volumoso/total
       
-      sprintf("%s t (%s)", br_format(total_volumoso),
+      sprintf("%s t (%s)n", br_format(total_volumoso),
               perc_format(perc))
     })
 
@@ -356,7 +467,7 @@ server <- function(id) {
 
     output$reciclometro_diario_regional <- renderEcharts4r({
       res <- dados$coleta_diaria %>%
-        group_by(ecoponto) %>% 
+        group_by(tipo, ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
 
@@ -370,21 +481,46 @@ server <- function(id) {
         mutate(
           regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
         ) %>%
-        e_chart(regional) %>% 
-        e_bar(peso_total) %>%
-        format_bar_plot
+        grafico_regional
     })
 
+    
 
     output$reciclometro_diario_ecoponto <- renderEcharts4r({
       dados$coleta_diaria %>%
-        group_by(ecoponto) %>% 
+        group_by(tipo, ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
         dplyr::arrange(-peso_total) %>%
-        e_chart(ecoponto) %>% 
-        e_bar(peso_total) %>%
-        format_bar_plot
+        grafico_ecoponto
+    })
+
+    output$reciclometro_diario_vl_regional <- renderEcharts4r({
+      res <- dados$coleta_diaria %>%
+        group_by(tipo, ecoponto) %>% 
+        summarise(vl_total = sum(as.numeric(total_rs))) %>%
+        mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
+
+      y <- dplyr::tbl(obsr, sprintf("br_iplanfor_ecopontos")) %>%
+        collect %>%
+        mutate(nome = toupper(nome))
+      
+      res %>%
+        dplyr::inner_join(y, by = c("ecoponto" = "nome")) %>%
+        dplyr::arrange(-vl_total) %>%
+        mutate(
+          regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
+        ) %>%
+        grafico_vl_regional
+    })
+
+    output$reciclometro_diario_vl_ecoponto <- renderEcharts4r({
+      dados$coleta_diaria %>%
+        group_by(tipo, ecoponto) %>% 
+        summarise(vl_total = sum(as.numeric(total_rs))) %>%
+        mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
+        dplyr::arrange(-vl_total) %>%
+        grafico_vl_ecoponto
     })
 
     ############
@@ -482,7 +618,7 @@ server <- function(id) {
 
     output$reciclometro_mensal_regional <- renderEcharts4r({
       res <- coleta_mensal %>%
-        group_by(ecoponto) %>% 
+        group_by(tipo, ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
 
@@ -496,21 +632,45 @@ server <- function(id) {
         mutate(
           regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
         ) %>%
-        e_chart(regional) %>% 
-        e_bar(peso_total) %>%
-        format_bar_plot
+        grafico_regional
     })
 
 
     output$reciclometro_mensal_ecoponto <- renderEcharts4r({
       coleta_mensal %>%
-        group_by(ecoponto) %>% 
+        group_by(tipo, ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
         dplyr::arrange(-peso_total) %>%
-        e_chart(ecoponto) %>% 
-        e_bar(peso_total) %>%
-        format_bar_plot
+        grafico_ecoponto
+    })
+
+    output$reciclometro_mensal_vl_regional <- renderEcharts4r({
+      res <- coleta_mensal %>%
+        group_by(tipo, ecoponto) %>% 
+        summarise(vl_total = sum(as.numeric(total_rs))) %>%
+        mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
+
+      y <- dplyr::tbl(obsr, sprintf("br_iplanfor_ecopontos")) %>%
+        collect %>%
+        mutate(nome = toupper(nome))
+      
+      res %>%
+        dplyr::inner_join(y, by = c("ecoponto" = "nome")) %>%
+        dplyr::arrange(-vl_total) %>%
+        mutate(
+          regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
+        ) %>%
+        grafico_vl_regional
+    })
+
+    output$reciclometro_mensal_vl_ecoponto <- renderEcharts4r({
+      coleta_mensal %>%
+        group_by(tipo, ecoponto) %>% 
+        summarise(vl_total = sum(as.numeric(total_rs))) %>%
+        mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
+        dplyr::arrange(-vl_total) %>%
+        grafico_vl_ecoponto
     })
 
     ###########
@@ -606,7 +766,7 @@ server <- function(id) {
 
     output$reciclometro_anual_regional <- renderEcharts4r({
       res <- coleta_anual %>%
-        group_by(ecoponto) %>% 
+        group_by(tipo, ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
 
@@ -620,21 +780,45 @@ server <- function(id) {
         mutate(
           regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
         ) %>%
-        e_chart(regional) %>% 
-        e_bar(peso_total) %>%
-        format_bar_plot
+        grafico_regional
     })
 
 
     output$reciclometro_anual_ecoponto <- renderEcharts4r({
       coleta_anual %>%
-        group_by(ecoponto) %>% 
+        group_by(tipo, ecoponto) %>% 
         summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
         mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
         dplyr::arrange(-peso_total) %>%
-        e_chart(ecoponto) %>% 
-        e_bar(peso_total) %>%
-        format_bar_plot
+        grafico_ecoponto
+    })
+
+    output$reciclometro_anual_vl_regional <- renderEcharts4r({
+      res <- coleta_anual %>%
+        group_by(tipo, ecoponto) %>% 
+        summarise(vl_total = sum(as.numeric(total_rs))) %>%
+        mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
+
+      y <- dplyr::tbl(obsr, sprintf("br_iplanfor_ecopontos")) %>%
+        collect %>%
+        mutate(nome = toupper(nome))
+      
+      res %>%
+        dplyr::inner_join(y, by = c("ecoponto" = "nome")) %>%
+        dplyr::arrange(-vl_total) %>%
+        mutate(
+          regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
+        ) %>%
+        grafico_vl_regional
+    })
+
+    output$reciclometro_anual_vl_ecoponto <- renderEcharts4r({
+      coleta_anual %>%
+        group_by(tipo, ecoponto) %>% 
+        summarise(vl_total = sum(as.numeric(total_rs))) %>%
+        mutate(ecoponto = gsub("ECOPONTO", "", ecoponto)) %>%
+        dplyr::arrange(-vl_total) %>%
+        grafico_vl_ecoponto
     })
 
     output$reciclometro_serie_historica_quantidade <- renderEcharts4r({
