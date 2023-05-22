@@ -24,7 +24,7 @@ box::use(
 update_data <- function(obsr, year) {
   today <- Sys.Date()
   curr_day  <- lubridate::mday(today)
-  tblname <- sprintf("br_ecofor_ecoponto_barra_do_ceara_%04d", year)
+  tblname <- sprintf("br_ecofor_ecoponto_%04d", year)
 
   dplyr::tbl(obsr, tblname) %>%
     collect %>%
@@ -36,7 +36,7 @@ update_data <- function(obsr, year) {
 }
 
 
-format_bar_plot <- function(x) {
+format_bar_plot <- function(x, show_legend=FALSE) {
   x %>%
     e_tooltip(
       formatter = htmlwidgets::JS("
@@ -50,7 +50,7 @@ format_bar_plot <- function(x) {
             )
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
-    e_legend(show = FALSE) %>%
+    e_legend(show = show_legend) %>%
     e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
 }
 
@@ -106,7 +106,7 @@ aba_reciclometro <- function(ns, x) {
         title = "Peso líquido por regional (t)", 
         elevation = 4,
         closable = FALSE, 
-        width = 6,
+        width = 12,
         solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
@@ -120,7 +120,7 @@ aba_reciclometro <- function(ns, x) {
         title = "Peso líquido por ecoponto (t)", 
         elevation = 4,
         closable = FALSE, 
-        width = 6,
+        width = 12,
         solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
@@ -137,6 +137,40 @@ aba_reciclometro <- function(ns, x) {
 #' @export
 ui <- function(id) {
   ns <- NS(id)
+
+  series_historicas <- tagList(
+    fluidRow(
+      box(
+        title = "Total coletado por tipo de resíduo (t)", 
+        elevation = 4,
+        closable = FALSE, 
+        width = 6,
+        solidHeader = TRUE, 
+        status = "primary",
+        collapsible = FALSE,
+        shinycssloaders::withSpinner(
+          type = 8,
+          color = "#0e2e45",
+          echarts4rOutput(ns("reciclometro_serie_historica_quantidade"))
+        )
+      ),
+      box(
+        title = "Total coletado por regional (t)", 
+        elevation = 4,
+        closable = FALSE, 
+        width = 6,
+        solidHeader = TRUE, 
+        status = "primary",
+        collapsible = FALSE,
+        shinycssloaders::withSpinner(
+          type = 8,
+          color = "#0e2e45",
+          echarts4rOutput(ns("reciclometro_serie_historica_quantidade_por_ecoponto"))
+        )
+      )
+    )
+  )
+  
   ## box(
   ##   title = "Peso total por tipo de resíduo (t)", 
   ##   elevation = 4,
@@ -177,6 +211,10 @@ ui <- function(id) {
       tabPanel(
         "Anual",
         aba_reciclometro(ns, "anual")
+      ),
+      tabPanel(
+        "Séries Históricas",
+        series_historicas
       )
     )
   )
@@ -192,7 +230,7 @@ server <- function(id) {
     curr_month <- 08#lubridate::month(today) - 2
     curr_day  <- lubridate::mday(today) - 2
     timeout_ms <- 5000 # Timeout for refresh daily data
-    curr_year_tblname <- sprintf("br_ecofor_ecoponto_barra_do_ceara_%04d", curr_year)
+    curr_year_tblname <- sprintf("br_ecofor_ecoponto_%04d", curr_year)
 
     coleta_anual <- dplyr::tbl(obsr, curr_year_tblname) %>%
       collect %>%
@@ -597,6 +635,55 @@ server <- function(id) {
         e_chart(ecoponto) %>% 
         e_bar(peso_total) %>%
         format_bar_plot
+    })
+
+    output$reciclometro_serie_historica_quantidade <- renderEcharts4r({
+      dplyr::bind_rows(lapply(2018:2023, function(ano){
+        dplyr::tbl(obsr, sprintf("br_ecofor_ecoponto_%04d", ano)) %>%
+          collect %>%
+          mutate(
+            quantidade = as.numeric(quantidade_kg),
+            timestamp = as.POSIXct(data)
+          ) %>%
+          group_by(tipo) %>%
+          summarise(total = sum(quantidade)/1000) %>%
+          mutate(ano = ano)
+      })) %>%
+        mutate(ano = as.factor(ano)) %>%
+        group_by(tipo) %>%
+        e_chart(ano) %>% 
+        e_line(total) %>%
+        format_bar_plot(show_legend=TRUE)
+    })
+
+    output$reciclometro_serie_historica_quantidade_por_ecoponto <- renderEcharts4r({
+
+      y <- dplyr::tbl(obsr, sprintf("br_iplanfor_ecopontos")) %>%
+        collect %>%
+        mutate(nome = toupper(nome))
+
+      dplyr::bind_rows(lapply(2018:2023, function(ano){
+        dplyr::tbl(obsr, sprintf("br_ecofor_ecoponto_%04d", ano)) %>%
+          collect %>%
+          mutate(
+            quantidade = as.numeric(quantidade_kg),
+            timestamp = as.POSIXct(data),
+            ano = as.factor(ano)
+          )
+      })) %>%
+        mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto))) %>%
+        filter(stringr::str_detect(ecoponto, "CARTIER", negate = TRUE)) %>%
+        dplyr::inner_join(y, by = c("ecoponto" = "nome")) %>%
+        mutate(
+          regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
+        ) %>%
+        group_by(ano, regional) %>%
+        summarise(total = sum(quantidade)/1000) %>%
+        group_by(regional) %>%
+        e_chart(ano) %>% 
+        e_line(total) %>%
+        format_bar_plot(show_legend = TRUE)
+
     })
 
     

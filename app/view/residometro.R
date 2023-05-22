@@ -52,7 +52,7 @@ filtra_regional <- function (x) {
   ## )
 }
 
-format_bar_plot <- function(x) {
+format_bar_plot <- function(x, show_legend = FALSE) {
   x %>%
     e_tooltip(
       formatter = htmlwidgets::JS("
@@ -66,7 +66,7 @@ format_bar_plot <- function(x) {
             )
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
-    e_legend(show = FALSE) %>%
+    e_legend(show = show_legend) %>%
     e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
 }
 
@@ -121,7 +121,7 @@ aba_residometro <- function(ns, x) {
         title = "Peso líquido por regional (t)", 
         elevation = 4,
         closable = FALSE, 
-        width = 6,
+        width = 12,
         solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
@@ -135,7 +135,7 @@ aba_residometro <- function(ns, x) {
         title = "Peso líquido por território (t)", 
         elevation = 4,
         closable = FALSE, 
-        width = 6,
+        width = 12,
         solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
@@ -172,6 +172,39 @@ aba_residometro <- function(ns, x) {
 ui <- function(id) {
   ns <- NS(id)
 
+  series_historicas <- tagList(
+    fluidRow(
+      box(
+        title = "Peso líquido por regional (t)", 
+        elevation = 4,
+        closable = FALSE, 
+        width = 12,
+        solidHeader = TRUE, 
+        status = "primary",
+        collapsible = FALSE,
+        shinycssloaders::withSpinner(
+          type = 8,
+          color = "#0e2e45",
+          echarts4rOutput(ns("residometro_serie_hist_regional"))
+        )
+      )## ,
+      ## box(
+      ##   title = "Peso líquido por território (t)", 
+      ##   elevation = 4,
+      ##   closable = FALSE, 
+      ##   width = 6,
+      ##   solidHeader = TRUE, 
+      ##   status = "primary",
+      ##   collapsible = FALSE,
+      ##   shinycssloaders::withSpinner(
+      ##     type = 8,
+      ##     color = "#0e2e45",
+      ##     echarts4rOutput(ns("residometro_serie_hist_territorio"))
+      ##   )
+      ## )
+    )
+  )
+
   tagList(
     tabBox(
       title = p(
@@ -198,9 +231,63 @@ ui <- function(id) {
       tabPanel(
         "Anual",
         aba_residometro(ns, "anual")
+      ),
+      tabPanel(
+        "Séries Históricas",
+        series_historicas
       )
     )
   )  
+}
+
+grafico_regional <- function(df) {
+  df %>%
+    filtra_regional %>%
+    group_by(material, regional) %>% 
+    summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>% 
+    arrange(-peso_liquido_total) %>%
+    e_chart(regional) %>% 
+    e_bar(peso_liquido_total, stack="grp") %>%
+    e_tooltip(
+      formatter = htmlwidgets::JS("
+            function(params) {
+              return '<span>'
+              + params.value[0] + '<br/>'
+              + params.seriesName + '<br/>'
+              + parseFloat(params.value[1]).toLocaleString('pt-BR')
+              + ' t'
+              + '</span>';
+            }"
+            )
+    ) %>%
+    e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
+    e_legend(show = TRUE) %>%
+    e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
+}
+
+grafico_territorio <- function(df) {
+  df %>%
+    filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
+    group_by(material, zgl) %>% 
+    summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
+    arrange(-peso_liquido_total) %>%
+    e_chart(zgl) %>% 
+    e_bar(peso_liquido_total, stack="grp") %>%
+    e_tooltip(
+      formatter = htmlwidgets::JS("
+            function(params) {
+              return '<span>'
+              + params.value[0] + '<br/>'
+              + params.seriesName + '<br/>'
+              + parseFloat(params.value[1]).toLocaleString('pt-BR')
+              + ' t'
+              + '</span>';
+            }"
+            )
+    ) %>%
+    e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
+    e_legend(show = TRUE) %>%
+    e_toolbox_feature(feature = c("dataView", "dataZoom", "saveAsImage"))
 }
 
 #' @export
@@ -272,7 +359,7 @@ server <- function(id) {
       total <- dados$pesagem_diaria %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-        
+      
       total_ceu <- dados$pesagem_diaria %>%
         filter(material %in% c("ESPECIAL URBANA", "LIXO ESPECIAL URBANA", "LIXO ESPECIAL URBANA - MECANIZADA")) %>%
         pull(peso_liquido) %>%
@@ -330,24 +417,12 @@ server <- function(id) {
 
     output$residometro_diario_regional <- renderEcharts4r({
       dados$pesagem_diaria %>%
-        filtra_regional %>%
-        group_by(regional) %>% 
-        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>% 
-        arrange(-peso_liquido_total) %>%
-        e_chart(regional) %>% 
-        e_bar(peso_liquido_total) %>%
-        format_bar_plot
+        grafico_regional        
     })
 
     output$residometro_diario_territorio <- renderEcharts4r({
       dados$pesagem_diaria %>%
-        filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
-        group_by(zgl) %>% 
-        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
-        arrange(-peso_liquido_total) %>%
-        e_chart(zgl) %>% 
-        e_bar(peso_liquido_total) %>%
-        format_bar_plot
+        grafico_territorio
     })
 
     ############
@@ -368,7 +443,7 @@ server <- function(id) {
       total <- pesagem_mensal %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-        
+      
       total_domiciliar <- pesagem_mensal %>%
         filter(material == "DOMICILIAR") %>%
         pull(peso_liquido) %>%
@@ -444,24 +519,12 @@ server <- function(id) {
 
     output$residometro_mensal_regional <- renderEcharts4r({
       pesagem_mensal %>%
-        filtra_regional %>%
-        group_by(regional) %>% 
-        summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(-peso_liquido_total) %>%
-        e_chart(regional) %>% 
-        e_bar(peso_liquido_total) %>% 
-        format_bar_plot
+        grafico_regional
     })
 
     output$residometro_mensal_territorio <- renderEcharts4r({
       pesagem_mensal %>%
-        filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
-        group_by(zgl) %>% 
-        summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(-peso_liquido_total) %>%
-        e_chart(zgl) %>% 
-        e_bar(peso_liquido_total) %>%
-        format_bar_plot
+        grafico_territorio
     })
 
     ###########
@@ -554,24 +617,12 @@ server <- function(id) {
 
     output$residometro_anual_regional <- renderEcharts4r({
       pesagem_anual %>%
-        filtra_regional %>%
-        group_by(regional) %>% 
-        summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(-peso_liquido_total) %>%
-        e_chart(regional) %>% 
-        e_bar(peso_liquido_total) %>%
-        format_bar_plot
+        grafico_regional
     })
 
     output$residometro_anual_territorio <- renderEcharts4r({
       pesagem_anual %>%
-        filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
-        group_by(zgl) %>% 
-        summarise(peso_liquido_total = sum(peso_liquido)) %>% 
-        arrange(-peso_liquido_total) %>%
-        e_chart(zgl) %>% 
-        e_bar(peso_liquido_total) %>% 
-        format_bar_plot
+        grafico_territorio
     })
 
 
@@ -611,6 +662,53 @@ server <- function(id) {
         e_heatmap(total, coord_system = "calendar") %>%
         e_visual_map(min = min_val, max = max_val)
     })
+
+    
+    output$residometro_serie_hist_regional <- renderEcharts4r({
+
+      dplyr::bind_rows(lapply(2016:2023, function(ano){
+        dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
+          collect %>%
+          mutate(
+            dia = as.integer(substring(data_saida, 1, 2)),
+            mes = as.integer(substring(data_saida, 4, 5)),
+            ano = as.integer(substring(data_saida, 7, 10)),
+            peso_liquido = as.numeric(peso_liquido)
+          )
+      })) %>%
+        filter(ano >= 2016 & ano <= 2023) %>%
+        mutate(ano = as.factor(ano)) %>%
+        filtra_regional %>%
+        group_by(ano, regional) %>% 
+        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
+        group_by(regional) %>%
+        e_chart(ano) %>% 
+        e_line(peso_liquido_total) %>%
+        format_bar_plot(show_legend = TRUE)
+    })
+
+    
+    ## output$residometro_serie_hist_territorio <- renderEcharts4r({
+    ##   dplyr::bind_rows(lapply(2016:2023, function(ano){
+    ##     dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
+    ##       collect %>%
+    ##       mutate(
+    ##         dia = as.integer(substring(data_saida, 1, 2)),
+    ##         mes = as.integer(substring(data_saida, 4, 5)),
+    ##         ano = as.integer(substring(data_saida, 7, 10)),
+    ##         peso_liquido = as.numeric(peso_liquido)
+    ##       )
+    ##   })) %>%
+    ##     filter(ano >= 2016 & ano <= 2023) %>%
+    ##     filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
+    ##     mutate(ano = as.factor(ano)) %>%
+    ##     group_by(ano, zgl) %>% 
+    ##     summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
+    ##     group_by(zgl) %>%
+    ##     e_chart(ano) %>% 
+    ##     e_line(peso_liquido_total) %>%
+    ##     format_bar_plot(show_legend = TRUE)
+    ## })
     
   }) # End Server
 }
