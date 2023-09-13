@@ -1,0 +1,3 @@
+PGHOST=db
+PG_SHINY_USER=shiny
+PG_SHINY_PASSWD=hg9WkedAJyp7uFpoZbSX

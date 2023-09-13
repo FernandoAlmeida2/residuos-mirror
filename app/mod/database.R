@@ -6,12 +6,13 @@ box::use(
 
 #' @export
 obsr <- dbPool(
-  Postgres(),
+  drv = Postgres(),
   dbname = "obsr",
-  host = "0.0.0.0",
-  user = "postgres",
-  password = "changeme"
+  host = Sys.getenv("PGHOST"),
+  user = Sys.getenv("PG_SHINY_USER"),
+  password = Sys.getenv("PG_SHINY_PASSWD")
 )
+
 onStop(function() {
   poolClose(obsr)
 })
