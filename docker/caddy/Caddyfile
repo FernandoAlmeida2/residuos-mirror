@@ -1,0 +1,74 @@
+{
+    email {$EMAIL}
+}
+
+{$HOST} {
+	encode gzip
+
+	# Páginas web principais
+	handle {
+		root /dados/* /srv
+		try_files path {path}/index.html
+		file_server
+	}
+
+	##################
+	# Página de erro #
+	##################
+	handle_errors {
+		@404 {
+			expression {http.error.status_code} == 404
+		}
+		rewrite @404 /404.html
+		file_server
+	}
+	log {
+	   output file /var/log/caddy/access.log
+	}
+
+	#############################
+	### Atlas do Capital Humano #
+	#############################
+        # Antigo alias do atlas
+	redir /atlas /dados/atlas_capital_humano/
+	redir /atlas/ /dados/atlas_capital_humano/
+	redir /atlas_capital_humano /dados/atlas_capital_humano/
+
+
+        ## Dashboard
+	#redir /dashboard/atlas_capital_humano /dados/dashboard/atlas_capital_humano
+        ## /atlas_capital_humano/painel
+	##	rewrite /atlas_capital_humano/painel /painel/ShinyApps/atlasCapitalHumano/
+	##redir /atlas_demografico /404.html    
+	##redir /atlas_economia /404.html 
+	#		reverse_proxy /atlas_capital_humano/painel/* atlas_capital_humano:3839
+        #handle_path /atlasCapitalHumano/* {
+	#	uri path_regexp /{2,} /
+	#	#respond {path}
+	#	#uri path_regexp /dashboard/ ""
+	#	reverse_proxy atlas_capital_humano:3839
+	#}
+	##redir /atlas_capital_humano/painel  /dados/atlasCapitalHumano/
+	#redir /atlas_capital_humano/painel  /404.html
+
+	#redir /painel /painel/
+	##rewrite /painel /painel/{query}
+	rewrite /ShinyApps/* /dashboard/{path}
+
+	##redir /dashboard/* /dados/dashboard/{uri}
+	##redir /dashboard/ /dados/dashboard
+	##
+        #handle {
+	#	reverse_proxy /dados/painel/* shiny_server:3838
+	#}
+
+
+	#########################################
+	# Páginas gerenciadas pelo shiny-server #
+	#########################################
+	handle_path /painel/* {
+		uri path_regexp /painel/ ""
+		# respond {path} ## Para depuração
+		reverse_proxy shiny:3838
+	}
+}
