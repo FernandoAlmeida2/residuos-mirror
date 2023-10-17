@@ -20,8 +20,7 @@ box::use(
   ./view/inicio,
   ./view/reciclometro,
   ./view/residometro,
-  ./view/pontos_coleta,
-  ./view/pontos_entrega,
+  ./view/coleta_em_mapas,
   ./view/mod_metodologia,
   ./view/mod_ficha_tecnica
 )
@@ -67,23 +66,18 @@ ui <- dashboardPage(
         icon = icon("home")
       ),
       menuItem(
+        "Programa E-dinheiro",
+        tabName = "reciclometro",
+        icon = icon("recycle")
+      ),
+      menuItem(
         "Residuômetro",
         tabName = "residometro",
         icon = icon("trash-restore")
       ),
       menuItem(
-        "Reciclômetro",
-        tabName = "reciclometro",
-        icon = icon("recycle")
-      ),
-      menuItem(
-        "Pontos de Coleta",
-        tabName = "pontos_coleta",
-        icon = icon("map-marked")
-      ),
-      menuItem(
-        "Pontos de Entrega",
-        tabName = "pontos_entrega",
+        "Coleta em Mapas",
+        tabName = "coleta_em_mapas",
         icon = icon("map-marked")
       ),
       menuItem(
@@ -137,12 +131,8 @@ ui <- dashboardPage(
         reciclometro$ui("reciclometro")
       ),
       tabItem(
-        tabName = "pontos_coleta",
-        pontos_coleta$ui("pontos_coleta")
-      ),
-      tabItem(
-        tabName = "pontos_entrega",
-        pontos_entrega$ui("pontos_entrega")
+        tabName = "coleta_em_mapas",
+        coleta_em_mapas$ui("coleta_em_mapas")
       ),
       tabItem(
         tabName = "mod_metodologia",

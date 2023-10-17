@@ -21,9 +21,9 @@ box::use(
 ## Status colors ##
 ###################
 #' @export
-primary <- "#0e2e45" # yellow
-secondary <- "#FCBA04" # violet2
-success <- "#69995D"# NULL
+primary <- "#255B54" # yellow
+secondary <- "#34AF63" # violet2
+success <- "#C2D12F"# NULL
 info <- blue2
 warning <- orange1
 danger <- "#A50104"# red
@@ -39,7 +39,7 @@ navy <- NULL
 cyan <- NULL
 teal <- NULL
 olive <- NULL
-green <- NULL
+green <- NULL #C2D12F
 lime <- NULL
 orange <- NULL
 yellow <- NULL

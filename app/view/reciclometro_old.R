@@ -59,7 +59,7 @@ format_bar_plot <- function(x, show_legend=FALSE) {
 aba_reciclometro <- function(ns, x) {
   tagList(
     fluidRow(
-        valueBox(
+      valueBox(
         value = h5(textOutput(ns(sprintf("reciclometro_%s_total", x))), style="color: #255B54; font-weight: 700;"),
         subtitle = p("Total", style="color: #255B54;"),
         color = "success",
@@ -67,22 +67,8 @@ aba_reciclometro <- function(ns, x) {
         width = 2
       ),
       valueBox(
-        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_papel", x))), style="font-weight: 700;"),
-        subtitle = p("Papel, vidro e plástico"),
-        color = "primary",
-        icon = icon("trash"),
-        width = 2
-      ),
-      valueBox(
-        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_metal", x))), style="font-weight: 700;"),
-        subtitle = p("Metal"),
-        color = "primary",
-        icon = icon("trash"),
-        width = 2
-      ),
-      valueBox(
-        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_oleo", x))), style="font-weight: 700;"),
-        subtitle = p("Óleo"),
+        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_entulho", x))), style="font-weight: 700;"),
+        subtitle = p("Entulho"),
         color = "primary",
         icon = icon("trash"),
         width = 2
@@ -95,12 +81,26 @@ aba_reciclometro <- function(ns, x) {
         width = 2
       ),
       valueBox(
-        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_entulho", x))), style="font-weight: 700;"),
-        subtitle = p("Entulho"),
+        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_metal", x))), style="font-weight: 700;"),
+        subtitle = p("Metal"),
         color = "primary",
         icon = icon("trash"),
         width = 2
       ),
+      valueBox(
+        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_papel", x))), style="font-weight: 700;"),
+        subtitle = p("Papel, vidro e plástico"),
+        color = "primary",
+        icon = icon("trash"),
+        width = 2
+      ),
+      valueBox(
+        value = h5(textOutput(ns(sprintf("reciclometro_%s_total_oleo", x))), style="font-weight: 700;"),
+        subtitle = p("Óleo"),
+        color = "primary",
+        icon = icon("trash"),
+        width = 2
+      )
     ),
     fluidRow(
       box(
@@ -182,10 +182,7 @@ ui <- function(id) {
   series_historicas <- tagList(
     fluidRow(
       box(
-        title = div(
-          "Total coletado por tipo de resíduo (t) - ",
-          span("de 2018 até 2020", class = "font-italic small")
-        ),
+        title = "Total coletado por tipo de resíduo (t)", 
         elevation = 4,
         closable = FALSE, 
         width = 12,
@@ -199,10 +196,7 @@ ui <- function(id) {
         )
       ),
       box(
-        title = div(
-          "Total coletado por tipo de resíduo (t) - ",
-          span("a partir de 2021", class = "font-italic small")
-        ), 
+        title = "Total coletado por regional (t)", 
         elevation = 4,
         closable = FALSE, 
         width = 12,
@@ -921,7 +915,7 @@ server <- function(id) {
       bindCache(nrow(coleta_anual))
 
     output$reciclometro_serie_historica_quantidade <- renderEcharts4r({
-      aggregated_data <- lapply(2021:2023, function(ano) {
+      aggregated_data <- lapply(2018:2023, function(ano) {
         dplyr::tbl(obsr, sprintf("br_ecofor_ecoponto_%04d", ano)) %>%
           group_by(tipo) %>%
           summarise(total = sum(as.numeric(quantidade_kg))/1000) %>%
@@ -947,7 +941,7 @@ server <- function(id) {
         mutate(nome = toupper(nome))
       
       # Aggregate and collect data for each year
-      aggregated_data <- lapply(2021:2023, function(ano){
+      aggregated_data <- lapply(2018:2023, function(ano){
         dplyr::tbl(obsr, sprintf("br_ecofor_ecoponto_%04d", ano)) %>%
           collect() %>%  # Collect first to perform subsequent operations in R
           mutate(

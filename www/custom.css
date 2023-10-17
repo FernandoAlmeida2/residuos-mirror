@@ -105,6 +105,18 @@ h2:after {
     margin-right: -100%;
 }
 
+h4{
+  font-size: 1.6rem;
+}
+
+h5{
+  font-size: 1.2rem;
+}
+
+h3{
+  font-size: 1.9rem;
+}
+
 
 #coleta_em_mapas-mapa {
     height: calc(100vh - 140px) !important;
