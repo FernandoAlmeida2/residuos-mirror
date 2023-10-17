@@ -25,20 +25,20 @@ box::use(
 ## to_ton <- function(x) { x/1000 }
 ## br_format <- scales::label_comma(accuracy = 1, big.mark = ".", decimal.mark = ",")
 
-update_data <- function(obsr, year, last_data) {
+update_data <- function(obsr, year) {
   today <- Sys.Date()
+  curr_day  <- lubridate::mday(today)
   tblname <- sprintf("br_acfor_relatorio_pesagem_%04d", year)
 
   dplyr::tbl(obsr, tblname) %>%
-    filter(data_saida == last_data) %>%
+    collect %>%
     mutate(
       dia = as.integer(substring(data_saida, 1, 2)),
       mes = as.integer(substring(data_saida, 4, 5)),
       ano = as.integer(substring(data_saida, 7, 10)),
       peso_liquido = as.numeric(peso_liquido)
     ) %>%
-    collect
-    
+    filter(dia == curr_day)
 }
 
 filtra_regional <- function (x) {
@@ -74,58 +74,55 @@ aba_residometro <- function(ns, x) {
   tagList(
     fluidRow(
       valueBox(
-        value = h5(textOutput(ns(sprintf("residometro_%s_total", x))), style="color: #255B54; font-weight: 700;"),
-        subtitle = p("Total", style="color: #255B54;"),
+        value = textOutput(ns(sprintf("residometro_%s_total", x))),
+        subtitle = "Total",
+        color = "primary",
+        icon = icon("trash"),
+        width = 2
+      ),
+      valueBox(
+        value = textOutput(ns(sprintf("residometro_%s_total_coleta_domiciliar", x))),
+        subtitle = "Coleta Domiciliar",
         color = "success",
         icon = icon("trash"),
         width = 2
       ),
       valueBox(
-        value = h5(textOutput(ns(sprintf("residometro_%s_total_coleta_domiciliar", x))), style="font-weight: 700;"),
-        subtitle = p("Coleta Domiciliar"),
-        color = "primary",
-        icon = icon("trash"),
-        width = 3
-      ),
-      valueBox(
-        value = h5(textOutput(ns(sprintf("residometro_%s_total_especial_urbana", x))), style="font-weight: 700;"),
-        subtitle = p("Coleta Especial Urbana"),
-        color = "primary",
-        icon = icon("trash"),
-        width = 3
-      ),
-      valueBox(
-        value = h5(textOutput(ns(sprintf("residometro_%s_total_podacao", x))), style="font-weight: 700;"),
-        subtitle = p("Poda"),
-        color = "primary",
+        value = textOutput(ns(sprintf("residometro_%s_total_especial_urbana", x))),
+        subtitle = "Coleta Especial Urbana",
+        color = "success",
         icon = icon("trash"),
         width = 2
       ),
       valueBox(
-        value = h5(textOutput(ns(sprintf("residometro_%s_total_entulho", x))), style="font-weight: 700;"),
-        subtitle = p("Entulho"),
-        color = "primary",
+        value = textOutput(ns(sprintf("residometro_%s_total_podacao", x))),
+        subtitle = "Poda",
+        color = "success",
+        icon = icon("trash"),
+        width = 2
+      ),
+      valueBox(
+        value = textOutput(ns(sprintf("residometro_%s_total_entulho", x))),
+        subtitle = "Entulho",
+        color = "success",
+        icon = icon("trash"),
+        width = 2
+      ),
+      valueBox(
+        value = textOutput(ns(sprintf("residometro_%s_total_coleta_seletiva", x))),
+        subtitle = "Coleta Seletiva",
+        color = "success",
         icon = icon("trash"),
         width = 2
       )
-      # valueBox(
-      #   value = h5(textOutput(ns(sprintf("residometro_%s_total_coleta_seletiva", x))), style="font-weight: 700;"),
-      #   subtitle = p("Coleta Seletiva"),
-      #   color = "primary",
-      #   icon = icon("trash"),
-      #   width = 2
-      # )
     ),
     fluidRow(
       box(
-        title =  div(
-          "Peso líquido por regional (t) - ",
-          span(textOutput(ns(paste0("title_regional_", x)), inline = TRUE), class = "font-italic small")
-        ),
+        title = "Peso líquido por regional (t)", 
         elevation = 4,
-        closable = FALSE,
+        closable = FALSE, 
         width = 12,
-        solidHeader = TRUE,
+        solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
         shinycssloaders::withSpinner(
@@ -134,30 +131,12 @@ aba_residometro <- function(ns, x) {
           echarts4rOutput(ns(sprintf("residometro_%s_regional", x)))
         )
       ),
-      # column(
-      #   width = 3,  # Ajuste a largura conforme necessário
-      #   box(
-      #     title = "Caixa de Texto 1",
-      #     textOutput(ns("texto1")),  # Ou você pode usar 'verbatimTextOutput' ou 'HTML' conforme necessário
-      #     width = NULL
-      #   ),
-      #   box(
-      #     title = "Caixa de Texto 2",
-      #     textOutput(ns("texto2")),  # Ou você pode usar 'verbatimTextOutput' ou 'HTML' conforme necessário
-      #     width = NULL
-      #   )
-      # ),
-
-
       box(
-        title = div(
-          "Peso líquido por território (t) - ",
-          span(textOutput(ns(paste0("title_territorio_", x)), inline = TRUE), class = "font-italic small")
-        ),
+        title = "Peso líquido por território (t)", 
         elevation = 4,
-        closable = FALSE,
+        closable = FALSE, 
         width = 12,
-        solidHeader = TRUE,
+        solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
         shinycssloaders::withSpinner(
@@ -196,31 +175,11 @@ ui <- function(id) {
   series_historicas <- tagList(
     fluidRow(
       box(
-        title = div(
-          "Peso líquido por regional (t) - ",
-          span("de 2018 até 2020", class = "font-italic small")
-        ),
+        title = "Peso líquido por regional (t)", 
         elevation = 4,
-        closable = FALSE,
+        closable = FALSE, 
         width = 12,
-        solidHeader = TRUE,
-        status = "primary",
-        collapsible = FALSE,
-        shinycssloaders::withSpinner(
-          type = 8,
-          color = "#0e2e45",
-          echarts4rOutput(ns("residometro_serie_hist_regional_antes"))
-        )
-      ),
-      box(
-        title = div(
-          "Peso líquido por regional (t) - ",
-          span("a partir de 2021", class = "font-italic small")
-      ),
-        elevation = 4,
-        closable = FALSE,
-        width = 12,
-        solidHeader = TRUE,
+        solidHeader = TRUE, 
         status = "primary",
         collapsible = FALSE,
         shinycssloaders::withSpinner(
@@ -228,21 +187,21 @@ ui <- function(id) {
           color = "#0e2e45",
           echarts4rOutput(ns("residometro_serie_hist_regional"))
         )
-      )
-      # box(
-      #   title = "Peso líquido por território (t)",
-      #   elevation = 4,
-      #   closable = FALSE,
-      #   width = 12,
-      #   solidHeader = TRUE,
-      #   status = "primary",
-      #   collapsible = FALSE,
-      #   shinycssloaders::withSpinner(
-      #     type = 8,
-      #     color = "#0e2e45",
-      #     echarts4rOutput(ns("residometro_serie_hist_territorio"))
-      #   )
-      # )
+      )## ,
+      ## box(
+      ##   title = "Peso líquido por território (t)", 
+      ##   elevation = 4,
+      ##   closable = FALSE, 
+      ##   width = 6,
+      ##   solidHeader = TRUE, 
+      ##   status = "primary",
+      ##   collapsible = FALSE,
+      ##   shinycssloaders::withSpinner(
+      ##     type = 8,
+      ##     color = "#0e2e45",
+      ##     echarts4rOutput(ns("residometro_serie_hist_territorio"))
+      ##   )
+      ## )
     )
   )
 
@@ -250,8 +209,7 @@ ui <- function(id) {
     tabBox(
       title = p(
         class="text-uppercase font-weight-bold",
-        "Residuômetro ",
-        span(sprintf("(Ano Base: %04d)", lubridate::year(Sys.Date())), class = "font-italic small")
+        sprintf("Residômetro (Ano Base: %04d)", lubridate::year(Sys.Date()))
       ),
       elevation = 2,
       id = "residometro",
@@ -336,76 +294,57 @@ grafico_territorio <- function(df) {
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
     
-    ns <- session$ns
-    
     today <- Sys.Date()
     curr_year <- lubridate::year(today)
-    curr_month <- lubridate::month(today)
+    curr_month <- lubridate::month(today) - 2
+    curr_day  <- lubridate::mday(today) - 2
+    timeout_ms <- 5000 # Timeout for refresh daily data
     curr_year_tblname <- sprintf("br_acfor_relatorio_pesagem_%04d", curr_year)
-    query_data <- sprintf('SELECT data_saida FROM %s ORDER BY ".db_pkid" DESC LIMIT 1', curr_year_tblname)
-    last_data <- dplyr::collect(dplyr::tbl(obsr, dplyr::sql(query_data)))$data_saida
 
     pesagem_anual <- dplyr::tbl(obsr, curr_year_tblname) %>%
+      collect %>%
       mutate(
         dia = as.integer(substring(data_saida, 1, 2)),
         mes = as.integer(substring(data_saida, 4, 5)),
         ano = as.integer(substring(data_saida, 7, 10)),
         peso_liquido = as.numeric(peso_liquido)
-      ) %>%
-      collect
+      )
 
-    pesagem_mensal <- pesagem_anual %>% filter(mes == as.integer(substring(last_data, 4, 5)))
+    pesagem_mensal <- pesagem_anual %>% filter(mes == curr_month)
 
-    pesagem_diaria <- update_data(obsr, curr_year, last_data)
+    dados <- shiny::reactiveValues(
+      pesagem_diaria = update_data(obsr, curr_year)
+    )
+
+    observe({
+      now <- lubridate::dmy_hms(format(Sys.time(), "%d/%m/%Y %H:%M"))
+      
+      dados$pesagem_diaria <- update_data(obsr, curr_year)
+      
+      shiny::invalidateLater(timeout_ms, session)
+    })
 
     e_common(theme = "roma")
-    
-    ### renderizando títulos
-    output$title_regional_diario <- renderText({
-      paste("Última atualização:", last_data)
-    })
-    
-    output$title_regional_mensal <- renderText({
-      paste0("Mês de referência: ", month_br_text(last_data), "/2023")
-    })
-    
-    output$title_regional_anual <- renderText({
-      paste("Ano de referência:", curr_year)
-    })
-    
-    output$title_territorio_diario <- renderText({
-      paste("Última atualização:", last_data)
-    })
-    
-    output$title_territorio_mensal <- renderText({
-      paste0("Mês de referência: ", month_br_text(last_data), "/2023")
-    })
-    
-    output$title_territorio_anual <- renderText({
-      paste("Ano de referência:", curr_year)
-    })
-    
 
     ############
     ## Diário ##
     ############
-    
     output$residometro_diario_total <- renderText({
 
-      total <- pesagem_diaria %>%
+      total <- dados$pesagem_diaria %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       sprintf("%s t", br_format(total))
     })
 
     output$residometro_diario_total_coleta_domiciliar <- renderText({
 
-      total <- pesagem_diaria %>%
+      total <- dados$pesagem_diaria %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
-      total_domiciliar <- pesagem_diaria %>%
+      
+      total_domiciliar <- dados$pesagem_diaria %>%
         filter(material == "DOMICILIAR") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
@@ -417,11 +356,11 @@ server <- function(id) {
 
     output$residometro_diario_total_especial_urbana <- renderText({
 
-      total <- pesagem_diaria %>%
+      total <- dados$pesagem_diaria %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
-      total_ceu <- pesagem_diaria %>%
+      
+      total_ceu <- dados$pesagem_diaria %>%
         filter(material %in% c("ESPECIAL URBANA", "LIXO ESPECIAL URBANA", "LIXO ESPECIAL URBANA - MECANIZADA")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
@@ -430,14 +369,14 @@ server <- function(id) {
       sprintf("%s t (%s)", br_format(total_ceu), perc_format(perc))
     })
 
-
+    
     output$residometro_diario_total_podacao <- renderText({
 
-      total <- pesagem_diaria %>%
+      total <- dados$pesagem_diaria %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
-      total_podacao <- pesagem_diaria %>%
+      
+      total_podacao <- dados$pesagem_diaria %>%
         filter(material %in% c("CAPINA", "PODAÇÃO")) %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
@@ -448,11 +387,11 @@ server <- function(id) {
 
     output$residometro_diario_total_entulho <- renderText({
 
-      total <- pesagem_diaria %>%
+      total <- dados$pesagem_diaria %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
-      total_entulho <- pesagem_diaria %>%
+      
+      total_entulho <- dados$pesagem_diaria %>%
         filter(material == "ENTULHO") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
@@ -463,11 +402,11 @@ server <- function(id) {
 
     output$residometro_diario_total_coleta_seletiva <- renderText({
 
-      total <- pesagem_diaria %>%
+      total <- dados$pesagem_diaria %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
-      total_seletiva <- pesagem_diaria %>%
+      
+      total_seletiva <- dados$pesagem_diaria %>%
         filter(material == "COLETA SELETIVA") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
@@ -477,16 +416,14 @@ server <- function(id) {
     })
 
     output$residometro_diario_regional <- renderEcharts4r({
-      pesagem_diaria %>%
-        grafico_regional
-    }) %>%
-      bindCache(nrow(pesagem_diaria))
+      dados$pesagem_diaria %>%
+        grafico_regional        
+    })
 
     output$residometro_diario_territorio <- renderEcharts4r({
-      pesagem_diaria %>%
+      dados$pesagem_diaria %>%
         grafico_territorio
-    }) %>%
-      bindCache(nrow(pesagem_diaria))
+    })
 
     ############
     ## Mensal ##
@@ -496,17 +433,17 @@ server <- function(id) {
       tot <- pesagem_mensal %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       sprintf("%s t", br_format(tot))
-
+      
     })
-
+    
     output$residometro_mensal_total_coleta_domiciliar <- renderText({
 
       total <- pesagem_mensal %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_domiciliar <- pesagem_mensal %>%
         filter(material == "DOMICILIAR") %>%
         pull(peso_liquido) %>%
@@ -522,7 +459,7 @@ server <- function(id) {
       total <- pesagem_mensal %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_ceu <- pesagem_mensal %>%
         filter(material %in% c("ESPECIAL URBANA", "LIXO ESPECIAL URBANA", "LIXO ESPECIAL URBANA - MECANIZADA")) %>%
         pull(peso_liquido) %>%
@@ -532,13 +469,13 @@ server <- function(id) {
       sprintf("%s t (%s)", br_format(total_ceu), perc_format(perc))
     })
 
-
+    
     output$residometro_mensal_total_podacao <- renderText({
 
       total <- pesagem_mensal %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_podacao <- pesagem_mensal %>%
         filter(material %in% c("CAPINA", "PODAÇÃO")) %>%
         pull(peso_liquido) %>%
@@ -553,7 +490,7 @@ server <- function(id) {
       total <- pesagem_mensal %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_entulho <- pesagem_mensal %>%
         filter(material == "ENTULHO") %>%
         pull(peso_liquido) %>%
@@ -568,14 +505,14 @@ server <- function(id) {
       total <- pesagem_mensal %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_seletiva <- pesagem_mensal %>%
         filter(material == "COLETA SELETIVA") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
 
       perc <- 100*total_seletiva/total
-
+      
       sprintf("%s t (%s)", br_format(total_seletiva), perc_format(perc))
     })
 
@@ -583,14 +520,12 @@ server <- function(id) {
     output$residometro_mensal_regional <- renderEcharts4r({
       pesagem_mensal %>%
         grafico_regional
-    }) %>%
-      bindCache(nrow(pesagem_mensal))
+    })
 
     output$residometro_mensal_territorio <- renderEcharts4r({
       pesagem_mensal %>%
         grafico_territorio
-    }) %>%
-      bindCache(nrow(pesagem_mensal))
+    })
 
     ###########
     ## Anual ##
@@ -599,22 +534,22 @@ server <- function(id) {
       tot <- pesagem_anual %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       sprintf("%s t", br_format(tot))
     })
 
-
+    
     output$residometro_anual_total_coleta_domiciliar <- renderText({
 
       total <- pesagem_anual %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_domiciliar <- pesagem_anual %>%
         filter(material == "DOMICILIAR") %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       sprintf("%s t (%s%%)", br_format(total_domiciliar),
               br_format(100*total_domiciliar/total))
     })
@@ -624,7 +559,7 @@ server <- function(id) {
       total <- pesagem_anual %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_ceu <- pesagem_anual %>%
         filter(material %in% c("ESPECIAL URBANA", "LIXO ESPECIAL URBANA", "LIXO ESPECIAL URBANA - MECANIZADA")) %>%
         pull(peso_liquido) %>%
@@ -634,13 +569,13 @@ server <- function(id) {
       sprintf("%s t (%s)", br_format(total_ceu), perc_format(perc))
     })
 
-
+    
     output$residometro_anual_total_podacao <- renderText({
 
       total <- pesagem_anual %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_podacao <- pesagem_anual %>%
         filter(material %in% c("CAPINA", "PODAÇÃO")) %>%
         pull(peso_liquido) %>%
@@ -655,7 +590,7 @@ server <- function(id) {
       total <- pesagem_anual %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_entulho <- pesagem_anual %>%
         filter(material == "ENTULHO") %>%
         pull(peso_liquido) %>%
@@ -670,7 +605,7 @@ server <- function(id) {
       total <- pesagem_anual %>%
         pull(peso_liquido) %>%
         sum %>% to_ton
-
+      
       total_seletiva <- pesagem_anual %>%
         filter(material == "COLETA SELETIVA") %>%
         pull(peso_liquido) %>%
@@ -683,15 +618,26 @@ server <- function(id) {
     output$residometro_anual_regional <- renderEcharts4r({
       pesagem_anual %>%
         grafico_regional
-    }) %>%
-      bindCache(nrow(pesagem_anual))
+    })
 
     output$residometro_anual_territorio <- renderEcharts4r({
       pesagem_anual %>%
         grafico_territorio
-    }) %>%
-      bindCache(nrow(pesagem_anual))
+    })
 
+
+    ## output$residometro_peso_placa <- renderEcharts4r({
+    ##   Pesagem_01_01_23 |> 
+    ##     dplyr::group_by(PLACA) |> 
+    ##     dplyr::summarise(Residômetro=sum(`PESO LIQUIDO`)) |> 
+    ##     dplyr::arrange(-Residômetro) |> 
+    ##     echarts4r::e_chart(x=PLACA) |> 
+    ##     echarts4r::e_bar(Residômetro) |> 
+    ##     echarts4r::e_flip_coords() |> 
+    ##     echarts4r::e_tooltip()|> 
+    ##     echarts4r::e_title('Peso liquido por placa (kg)')
+
+    ## })
 
     output$residometro_anual_heatmap <- renderEcharts4r({
       res <- pesagem_anual %>%
@@ -701,7 +647,7 @@ server <- function(id) {
         group_by(data_saida) %>%
         summarise(total = to_ton(sum(peso_liquido)))
 
-
+      
       min_val <- res %>%
         pull(total) %>%
         min
@@ -715,39 +661,12 @@ server <- function(id) {
         e_calendar(range = curr_year) %>%
         e_heatmap(total, coord_system = "calendar") %>%
         e_visual_map(min = min_val, max = max_val)
-    }) %>%
-      bindCache(nrow(pesagem_anual))
+    })
 
-
-    output$residometro_serie_hist_regional_antes <- renderEcharts4r({
-      
-      dplyr::bind_rows(lapply(2018:2020, function(ano){
-        dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
-          collect %>%
-          mutate(
-            dia = as.integer(substring(data_saida, 1, 2)),
-            mes = as.integer(substring(data_saida, 4, 5)),
-            ano = as.integer(substring(data_saida, 7, 10)),
-            peso_liquido = as.numeric(peso_liquido)
-          )
-      })) %>%
-        filter(ano >= 2018 & ano <= 2020) %>%
-        mutate(ano = as.factor(ano)) %>%
-        filtra_regional %>%
-        group_by(ano, regional) %>% 
-        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
-        group_by(regional) %>%
-        e_chart(ano) %>% 
-        e_line(peso_liquido_total) %>%
-        format_bar_plot(show_legend = TRUE)
-    }) %>%
-      bindCache(nrow(pesagem_anual))
-    
-    
     
     output$residometro_serie_hist_regional <- renderEcharts4r({
-      
-      dplyr::bind_rows(lapply(2021:2023, function(ano){
+
+      dplyr::bind_rows(lapply(2016:2023, function(ano){
         dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
           collect %>%
           mutate(
@@ -757,7 +676,7 @@ server <- function(id) {
             peso_liquido = as.numeric(peso_liquido)
           )
       })) %>%
-        filter(ano >= 2021 & ano <= 2023) %>%
+        filter(ano >= 2016 & ano <= 2023) %>%
         mutate(ano = as.factor(ano)) %>%
         filtra_regional %>%
         group_by(ano, regional) %>% 
@@ -766,34 +685,30 @@ server <- function(id) {
         e_chart(ano) %>% 
         e_line(peso_liquido_total) %>%
         format_bar_plot(show_legend = TRUE)
-    }) %>%
-      bindCache(nrow(pesagem_anual))
-    
-    # output$residometro_serie_hist_territorio <- renderEcharts4r({
-    #   dplyr::bind_rows(lapply(2016:2023, function(ano){
-    #     dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
-    #       collect %>%
-    #       mutate(
-    #         dia = as.integer(substring(data_saida, 1, 2)),
-    #         mes = as.integer(substring(data_saida, 4, 5)),
-    #         ano = as.integer(substring(data_saida, 7, 10)),
-    #         peso_liquido = as.numeric(peso_liquido)
-    #       )
-    #   })) %>%
-    #     filter(ano >= 2016 & ano <= 2023) %>%
-    #     filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
-    #     mutate(ano = as.factor(ano)) %>%
-    #     group_by(ano, zgl) %>%
-    #     summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
-    #     group_by(zgl) %>%
-    #     e_chart(ano) %>%
-    #     e_line(peso_liquido_total) %>%
-    #     format_bar_plot(show_legend = TRUE)
-    # })
+    })
 
     
-   
+    ## output$residometro_serie_hist_territorio <- renderEcharts4r({
+    ##   dplyr::bind_rows(lapply(2016:2023, function(ano){
+    ##     dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
+    ##       collect %>%
+    ##       mutate(
+    ##         dia = as.integer(substring(data_saida, 1, 2)),
+    ##         mes = as.integer(substring(data_saida, 4, 5)),
+    ##         ano = as.integer(substring(data_saida, 7, 10)),
+    ##         peso_liquido = as.numeric(peso_liquido)
+    ##       )
+    ##   })) %>%
+    ##     filter(ano >= 2016 & ano <= 2023) %>%
+    ##     filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
+    ##     mutate(ano = as.factor(ano)) %>%
+    ##     group_by(ano, zgl) %>% 
+    ##     summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
+    ##     group_by(zgl) %>%
+    ##     e_chart(ano) %>% 
+    ##     e_line(peso_liquido_total) %>%
+    ##     format_bar_plot(show_legend = TRUE)
+    ## })
     
   }) # End Server
 }
-

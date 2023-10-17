@@ -17,32 +17,28 @@ box::use(
     monospace_font,
     primary
   ],
-  ./view/inicio,
+  ./view/coleta_em_mapas,
   ./view/reciclometro,
-  ./view/residometro,
-  ./view/pontos_coleta,
-  ./view/pontos_entrega,
-  ./view/mod_metodologia,
-  ./view/mod_ficha_tecnica
+  ./view/residometro
 )
 
 #' @export
 ui <- dashboardPage(
-  # preloader = list(
-  #   html = tagList(
-  #     spin_cube_grid(),
-  #     br(),
-  #     "Carregando ..."
-  #   ),
-  #   color = primary
-  # ),
+  preloader = list(
+    html = tagList(
+      spin_cube_grid(),
+      br(),
+      "Carregando ..."
+    ),
+    color = primary
+  ),
   dark = FALSE,
   help = FALSE,
   fullscreen = TRUE,
   scrollToTop = TRUE,
   header = dashboardHeader(
     title = dashboardBrand(
-      title = "",
+      title = "OBSR",
       color = "primary",
       href = "https://observatoriodefortaleza.fortaleza.ce.gov.br/",
       image = "logo.png",
@@ -62,39 +58,19 @@ ui <- dashboardPage(
       compact = FALSE,
       childIndent = TRUE,
       menuItem(
-        "Início",
-        tabName = "inicio",
-        icon = icon("home")
-      ),
-      menuItem(
-        "Residuômetro",
-        tabName = "residometro",
-        icon = icon("trash-restore")
-      ),
-      menuItem(
         "Reciclômetro",
         tabName = "reciclometro",
         icon = icon("recycle")
       ),
       menuItem(
-        "Pontos de Coleta",
-        tabName = "pontos_coleta",
+        "Residômetro",
+        tabName = "residometro",
+        icon = icon("trash-restore")
+      ),
+      menuItem(
+        "Coleta em Mapas",
+        tabName = "coleta_em_mapas",
         icon = icon("map-marked")
-      ),
-      menuItem(
-        "Pontos de Entrega",
-        tabName = "pontos_entrega",
-        icon = icon("map-marked")
-      ),
-      menuItem(
-        "Metodologia",
-        tabName = "mod_metodologia",
-        icon = icon("book")
-      ),
-      menuItem(
-        "Ficha Técnica",
-        tabName = "mod_ficha_tecnica",
-        icon = icon("users")
       )
     )
   ),
@@ -125,32 +101,16 @@ ui <- dashboardPage(
     ),
     tabItems(
       tabItem(
-        tabName = "inicio",
-        inicio$ui("inicio")
-      ),
-      tabItem(
         tabName = "residometro",
         residometro$ui("residometro")
       ),
       tabItem(
+        tabName = "coleta_em_mapas",
+        coleta_em_mapas$ui("coleta_em_mapas")
+      ),
+      tabItem(
         tabName = "reciclometro",
         reciclometro$ui("reciclometro")
-      ),
-      tabItem(
-        tabName = "pontos_coleta",
-        pontos_coleta$ui("pontos_coleta")
-      ),
-      tabItem(
-        tabName = "pontos_entrega",
-        pontos_entrega$ui("pontos_entrega")
-      ),
-      tabItem(
-        tabName = "mod_metodologia",
-        mod_metodologia$ui("mod_metodologia")
-      ),
-      tabItem(
-        tabName = "mod_ficha_tecnica",
-        mod_ficha_tecnica$ui("mod_ficha_tecnica")
       )
     )
   ),

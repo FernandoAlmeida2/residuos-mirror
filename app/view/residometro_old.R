@@ -85,14 +85,14 @@ aba_residometro <- function(ns, x) {
         subtitle = p("Coleta Domiciliar"),
         color = "primary",
         icon = icon("trash"),
-        width = 3
+        width = 2
       ),
       valueBox(
         value = h5(textOutput(ns(sprintf("residometro_%s_total_especial_urbana", x))), style="font-weight: 700;"),
         subtitle = p("Coleta Especial Urbana"),
         color = "primary",
         icon = icon("trash"),
-        width = 3
+        width = 2
       ),
       valueBox(
         value = h5(textOutput(ns(sprintf("residometro_%s_total_podacao", x))), style="font-weight: 700;"),
@@ -107,14 +107,14 @@ aba_residometro <- function(ns, x) {
         color = "primary",
         icon = icon("trash"),
         width = 2
+      ),
+      valueBox(
+        value = h5(textOutput(ns(sprintf("residometro_%s_total_coleta_seletiva", x))), style="font-weight: 700;"),
+        subtitle = p("Coleta Seletiva"),
+        color = "primary",
+        icon = icon("trash"),
+        width = 2
       )
-      # valueBox(
-      #   value = h5(textOutput(ns(sprintf("residometro_%s_total_coleta_seletiva", x))), style="font-weight: 700;"),
-      #   subtitle = p("Coleta Seletiva"),
-      #   color = "primary",
-      #   icon = icon("trash"),
-      #   width = 2
-      # )
     ),
     fluidRow(
       box(
@@ -196,27 +196,7 @@ ui <- function(id) {
   series_historicas <- tagList(
     fluidRow(
       box(
-        title = div(
-          "Peso líquido por regional (t) - ",
-          span("de 2018 até 2020", class = "font-italic small")
-        ),
-        elevation = 4,
-        closable = FALSE,
-        width = 12,
-        solidHeader = TRUE,
-        status = "primary",
-        collapsible = FALSE,
-        shinycssloaders::withSpinner(
-          type = 8,
-          color = "#0e2e45",
-          echarts4rOutput(ns("residometro_serie_hist_regional_antes"))
-        )
-      ),
-      box(
-        title = div(
-          "Peso líquido por regional (t) - ",
-          span("a partir de 2021", class = "font-italic small")
-      ),
+        title = "Peso líquido por regional (t)",
         elevation = 4,
         closable = FALSE,
         width = 12,
@@ -228,21 +208,21 @@ ui <- function(id) {
           color = "#0e2e45",
           echarts4rOutput(ns("residometro_serie_hist_regional"))
         )
+      ),
+      box(
+        title = "Peso líquido por território (t)",
+        elevation = 4,
+        closable = FALSE,
+        width = 6,
+        solidHeader = TRUE,
+        status = "primary",
+        collapsible = FALSE,
+        shinycssloaders::withSpinner(
+          type = 8,
+          color = "#0e2e45",
+          echarts4rOutput(ns("residometro_serie_hist_territorio"))
+        )
       )
-      # box(
-      #   title = "Peso líquido por território (t)",
-      #   elevation = 4,
-      #   closable = FALSE,
-      #   width = 12,
-      #   solidHeader = TRUE,
-      #   status = "primary",
-      #   collapsible = FALSE,
-      #   shinycssloaders::withSpinner(
-      #     type = 8,
-      #     color = "#0e2e45",
-      #     echarts4rOutput(ns("residometro_serie_hist_territorio"))
-      #   )
-      # )
     )
   )
 
@@ -719,35 +699,9 @@ server <- function(id) {
       bindCache(nrow(pesagem_anual))
 
 
-    output$residometro_serie_hist_regional_antes <- renderEcharts4r({
-      
-      dplyr::bind_rows(lapply(2018:2020, function(ano){
-        dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
-          collect %>%
-          mutate(
-            dia = as.integer(substring(data_saida, 1, 2)),
-            mes = as.integer(substring(data_saida, 4, 5)),
-            ano = as.integer(substring(data_saida, 7, 10)),
-            peso_liquido = as.numeric(peso_liquido)
-          )
-      })) %>%
-        filter(ano >= 2018 & ano <= 2020) %>%
-        mutate(ano = as.factor(ano)) %>%
-        filtra_regional %>%
-        group_by(ano, regional) %>% 
-        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
-        group_by(regional) %>%
-        e_chart(ano) %>% 
-        e_line(peso_liquido_total) %>%
-        format_bar_plot(show_legend = TRUE)
-    }) %>%
-      bindCache(nrow(pesagem_anual))
-    
-    
-    
     output$residometro_serie_hist_regional <- renderEcharts4r({
       
-      dplyr::bind_rows(lapply(2021:2023, function(ano){
+      dplyr::bind_rows(lapply(2016:2023, function(ano){
         dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
           collect %>%
           mutate(
@@ -757,7 +711,7 @@ server <- function(id) {
             peso_liquido = as.numeric(peso_liquido)
           )
       })) %>%
-        filter(ano >= 2021 & ano <= 2023) %>%
+        filter(ano >= 2016 & ano <= 2023) %>%
         mutate(ano = as.factor(ano)) %>%
         filtra_regional %>%
         group_by(ano, regional) %>% 

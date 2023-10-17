@@ -5,13 +5,9 @@ box::use(
 
 box::use(
   ./mod/notification[notify],
-  ./view/inicio,
+  ./view/coleta_em_mapas,
   ./view/reciclometro,
-  ./view/residometro,
-  ./view/pontos_coleta,
-  ./view/pontos_entrega,
-  ./view/mod_metodologia,
-  ./view/mod_ficha_tecnica
+  ./view/residometro
 )
 
 #' @export
@@ -54,11 +50,7 @@ server <- function(input, output, session) {
   #########################
   ## Inicializa as views ##
   #########################
-  pontos_coleta$server("pontos_coleta")
-  pontos_entrega$server("pontos_entrega")
-  inicio$server("inicio")
+  coleta_em_mapas$server("coleta_em_mapas")
   reciclometro$server("reciclometro")
   residometro$server("residometro")
-  mod_ficha_tecnica$server("mod_ficha_tecnica")
-  mod_metodologia$server("mod_metodologia")
 }

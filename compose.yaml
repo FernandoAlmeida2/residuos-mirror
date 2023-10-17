@@ -1,0 +1,81 @@
+services:
+  shiny:
+    build: ./docker/shiny
+    restart: unless-stopped
+    user: shiny
+    expose:
+      - "3838"
+    volumes:
+      - r_packages:/usr/local/lib/R/site-library/
+      - $PWD/00_paineis:/srv/shiny-server/
+    environment:
+      PGHOST: "${PGHOST}"
+      PG_SHINY_PASSWD: "${PG_SHINY_PASSWD}"
+      PG_SHINY_USER: "${PG_SHINY_USER}"
+    depends_on:
+      - db
+    networks:
+      plataforma:
+        ipv4_address: 172.168.2.3
+  caddy:
+    image: caddy:2.5.2-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/www:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - HOST=":80"
+      #- HOST="observatoriodefortaleza.fortaleza.ce.gov.br"
+      - EMAIL="elis.teixeira@iplanfor.fortaleza.ce.gov.br"
+    depends_on:
+      - shiny
+    networks:
+      plataforma:
+        ipv4_address: 172.168.2.2
+
+  db:
+    image: postgis/postgis:14-3.2
+    user: postgres
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "${PGPASSWORD}"
+      POSTGRES_USER: "${PGUSER}"
+      POSTGRES_DB: "${PGDATABASE}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - $PWD/bkp/db/:/usr/share/data
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    networks:
+      plataforma:
+        ipv4_address: 172.168.2.1
+    
+networks:
+  plataforma:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.168.2.0/16"
+
+volumes:
+  caddy_data:
+  caddy_config:
+  r_packages:
+  postgres_data:
+
