@@ -72,7 +72,7 @@ ui <- function(id) {
           class = "bg-secondary min-vh-100 p-5",
           sidebarLayout(
             filterPanel(
-              class = "text-white d-flex align-items-center flex-column pr-5",
+              class = "text-white d-flex align-items-center flex-column pr-4",
               div(
                 class = "position-relative w-100",
                 img(class = "mt-n5 ml-n4 position-absolute z-index-1 top-0 left-0", src="logo_maps.png",
@@ -80,10 +80,9 @@ ui <- function(id) {
               ),
               h4("Já sabe o que quer fazer com",br(),
                  "seus resíduos? Encontre aqui",br(),
-                 "o próximo destino deles!",
-                 class="text-center position-relative z-index-2 font-weight-bold"
+                 "o próximo destino deles!", br(), br(),
+                 class="text-center position-relative z-index-2 font-weight-bold mb-2"
               ),
-              br(), br(),
               div(
                 uiOutput(ns("informe_ui")),
                 h5("Quero saber onde entregar esse"),
@@ -107,7 +106,7 @@ ui <- function(id) {
               )
             ),
             plotPanel(
-              leafletOutput(ns("plot"), height = "80vh"),
+              leafletOutput(ns("plot"), height = "40rem"),
               class = "plot"
             )
           )
