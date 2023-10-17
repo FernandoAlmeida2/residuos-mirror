@@ -1,6 +1,6 @@
 # Projeto Mais Fortaleza
 
-<img src="./www/presentation.gif" height="312px" alt="My project">
+<img src="./www/presentation.gif" alt="My project">
 
 Descrição do projeto em um parágrafo, das principais funcionalidades.
 

@@ -241,13 +241,9 @@ server <- function(id) {
       
       if(nrow(filtered_points) == 0) {
         showModal(modalDialog(
-          # div(
-          #   h4("Nenhum ponto de coleta no momento!", style = "text-align"),
-          #   h5("Procure em outro ponto de coleta ou bairro mais próximo.", style = "text-align"),
-          #   style= "display: flex; justify-content: center; flex-direction: column;"
-          # ),
           title = "Este resíduo faz parte da logística reversa!",
-          "A coleta deve ser feita pela empresa que produziu esse resíduo.",
+          "A entrega do resíduo deve ser feita na empresa onde adquiriu o produto ou na empresa onde o produto
+          foi fabricado.",
           footer = modalButton("Retornar")
           #footer = actionButton(ns("close"), "Retornar")
         ))
@@ -255,7 +251,8 @@ server <- function(id) {
         if(choice_lixo$LogisticaReversa %in% 1) {
           showModal(modalDialog(
             title = "Este resíduo faz parte da logística reversa!",
-            "A coleta pode também ser feita pela empresa que produziu esse resíduo.",
+            "A entrega do resíduo pode também ser feita na empresa onde adquiriu o produto ou na empresa onde 
+            o produto foi fabricado.",
             footer = modalButton("Voltar para os pontos de coleta")
             #footer = actionButton(ns("close"), "Retornar")
           ))
