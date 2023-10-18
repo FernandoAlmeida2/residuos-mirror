@@ -1,3 +1,3 @@
-PGHOST=
-PG_SHINY_USER=
-PG_SHINY_PASSWD=
+PGHOST=database_host
+PG_SHINY_USER=database_user
+PG_SHINY_PASSWD=database_password

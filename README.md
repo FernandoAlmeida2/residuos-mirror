@@ -32,11 +32,49 @@ Algumas das principais tecnologias e frameworks utilizados no projeto.<br/><br/>
 
 ## Como rodar o projeto
 
-1. Abra o arquivo app.R no RStudio
+### Banco de dados
 
-2. No console, instale o pacote renv
+1. Crie um novo banco de dados no postgres com o nome obsr
+
+```bash
+CREATE DATABASE obsr
+```
+
+2. No terminal, faça o dump do banco de dados que se encontra em [`\data`](https://gitlab.com/DIOBS/obsr/dashboard/-/tree/main/data)
+
+```bash
+psql obsr < obsr.sql
+```
+
+### Projeto 
+
+1. Crie um arquivo `.Renviron` com as credenciais do banco de dados usando o modelo do arquivo `.Renviron.example`
+
+2. Abra o arquivo app.R no RStudio
+
+3. No console, instale o pacote renv
 
 ```bash
 install.packages("renv")
 ```
+
+4. Inicialize o projeto
+
+```bash
+renv::init()
+```
+
+5. Instale todas as dependências
+
+```bash
+renv::install()
+```
+
+5. Crie um arquivo lockfile com o estado atual do projeto
+
+```bash
+renv::snapshot()
+```
+
+6. Execute o projeto
 
