@@ -42,7 +42,7 @@ ui <- dashboardPage(
   scrollToTop = TRUE,
   header = dashboardHeader(
     title = dashboardBrand(
-      title = "",
+      title = "OBSR",
       color = "primary",
       href = "https://observatoriodefortaleza.fortaleza.ce.gov.br/",
       image = "logo.png",
