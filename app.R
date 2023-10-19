@@ -8,3 +8,4 @@ box::use(
 thematic$thematic_shiny()
 
 shiny$shinyApp(ui, server)
+

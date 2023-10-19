@@ -1,17 +1,17 @@
-# Projeto Mais Fortaleza
+# Observatório de Resíduos Sólidos
 
-<img src="./www/presentation.gif" alt="My project">
+<img src="./www/presentation.gif" width="600px" alt="My project">
 
-Descrição do projeto em um parágrafo, das principais funcionalidades.
+Este é um projeto que foi desenvolvido pelo Iplanfor e faz parte do novo programa de limpeza urbana, o **Mais Fortaleza**. O usuário pode acessar os números da coleta de lixo de Fortaleza, os pontos de coleta e de entrega de recicláveis.
 
 O projeto pode ser visto em https://observatoriodefortaleza.fortaleza.ce.gov.br/dados/painel/obsr/
 
 
 ## Sobre
 
-- Descrição mais detalhada (com bullets das principais features)
+<!--- - Descrição mais detalhada (com bullets das principais features)
 - O porque da existência do projeto.
-- Pode incluir aqui também uma lista de features ainda não implementadas / próximos passos.
+- Pode incluir aqui também uma lista de features ainda não implementadas / próximos passos.<> -->
 
 
 ## Tecnologias
