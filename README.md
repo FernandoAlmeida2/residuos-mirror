@@ -14,6 +14,19 @@ O projeto pode ser visto em https://observatoriodefortaleza.fortaleza.ce.gov.br/
 - Pode incluir aqui também uma lista de features ainda não implementadas / próximos passos.<> -->
 
 
+Funcionalidades:
+
+- Residuômetro: Números gerais da coleta de resíduos em Fortaleza por dia, mês e ano, e série histórica (2018-2023), além de gráficos segmentados por regional e território.
+
+- Reciclômetro: Números gerais da reciclagem em Fortaleza por dia, mês e ano, e série histórica (2018-2023), além de gráficos segmentados por regional e ecoponto.
+
+- Pontos de coleta: Mapa para consulta dos dias e horários em que é realizada a coleta domiciliar com um filtro por Bairro.
+
+- Pontos de entrega: Mapa para consulta dos pontos para entrega de resíduos para a reciclagem, com filtros por nome do resíduo, ponto de coleta e Bairro.
+
+- Metodologia: Descrição da metodologia utilizada em todo o projeto.
+
+
 ## Tecnologias
 
 Algumas das principais tecnologias e frameworks utilizados no projeto.<br/><br/>
