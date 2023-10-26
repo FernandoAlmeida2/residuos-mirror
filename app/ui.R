@@ -36,6 +36,7 @@ ui <- dashboardPage(
   #   ),
   #   color = primary
   # ),
+  shinyjs::useshinyjs(),
   dark = FALSE,
   help = FALSE,
   fullscreen = TRUE,

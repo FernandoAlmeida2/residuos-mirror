@@ -1,0 +1,351 @@
+**Metodologia**
+
+O processo metodológico adotado para aprimorar a gestão dos resíduos
+sólidos em Fortaleza foi estruturado em várias fases, enfatizando a
+integração e análise de dados de múltiplas fontes. A cidade, reconhecida
+por sua excelência na utilização e administração de dados, integrou-se a
+programas significativos da Bloomberg Philanthropies, colaborando
+estreitamente com a Center for Government Excellence da Johns Hopkins
+University.
+
+1.  **Definição dos Requisitos**: Inicialmente, conduziu-se uma análise
+    > detalhada para identificar os requisitos específicos relacionados
+    > à gestão de resíduos sólidos, baseando-se nas necessidades das
+    > secretarias e entidades responsáveis.
+
+```{=html}
+<!-- -->
+```
+2.  **Integração de Dados**: Uma variedade de dados foi coletada de
+    > diversas fontes pertinentes ao fluxo da gestão municipal de
+    > resíduos sólidos. A integração desses dados foi fundamental para
+    > alimentar as análises subsequentes realizadas pelo Observatório de
+    > Fortaleza. Foi dada especial atenção à confidencialidade de
+    > informações sensíveis, particularmente dados empresariais,
+    > garantindo-se um sistema que permite diferentes níveis de acesso
+    > para variados perfis de usuários.
+
+```{=html}
+<!-- -->
+```
+3.  **Desenvolvimento de Protótipo**: Posteriormente, uma versão
+    > protótipo da plataforma de monitoramento foi meticulosamente
+    > elaborada pelos engenheiros de software/dados do IPLANFOR. Este
+    > estágio envolveu a criação de um sistema preliminar para testar a
+    > viabilidade e eficácia da solução proposta.
+
+```{=html}
+<!-- -->
+```
+4.  **Elaboração de Ferramentas de ETL**: Paralelamente, procedeu-se com
+    > o desenvolvimento de ferramentas específicas para Extração,
+    > Transformação e Carga (ETL), essenciais para conectar e
+    > sincronizar as bases de dados identificadas. Estas ferramentas
+    > foram empregadas para coletar dados de forma sistemática,
+    > estabelecendo-se também um cronograma regular para a atualização
+    > dessas informações.
+
+```{=html}
+<!-- -->
+```
+5.  **Coleta e Extração de Dados**: Os cientistas de dados desempenharam
+    > um papel crucial na coleta e extração de informações das fontes
+    > mapeadas. Utilizaram-se sistemas avançados como PostgreSQL,
+    > complementados por interfaces de consulta desenvolvidas com a
+    > biblioteca shiny da linguagem de programação R, para integrar
+    > dados de múltiplos originadores.
+
+```{=html}
+<!-- -->
+```
+6.  **Implementação e Operacionalização**: Na fase de execução,
+    > considerou-se a gestão diferenciada de vários tipos de resíduos
+    > através de fluxos distintos de operações, incluindo a logística
+    > para resíduos não recicláveis (mistos), recicláveis e resíduos
+    > sólidos urbanos. Cada categoria exigiu abordagens específicas,
+    > otimizando os processos existentes e assegurando a eficiência da
+    > gestão como um todo.
+
+**Residuômetro**
+
+**Equações utilizadas em nosso painel para a questão do Residuômetro:**
+
+**Percentual de Coleta Domiciliar**: Este cálculo é para determinar qual
+porção do total é especificamente de \"Coleta Domiciliar\". A coleta de
+resíduos sólidos domiciliares consiste na atividade regular de
+recolhimento e de transporte do lixo gerado nas residências, no comércio
+e nos prédios públicos.
+
+$Percentual\ coleta\ domiciliar = \ \frac{Total\ domiciliar}{Total\ geral}x100$
+
+**Percentual de Coleta Especial Urbana**: Similar ao cálculo domiciliar,
+mas focado na \"Coleta Especial Urbana\".É o sistema de recolhimento de
+poda, entulho e lixo indivisível (lixo solto), **direcionada ao
+recolhimento de resíduos descartados de maneira imprópria**.
+
+$Percentual\ coleta\ especial = \ \frac{Total\ especial\ urbana}{Total\ geral}x100$
+
+**Percentual de Podação:** Este cálculo é para a categoria de
+\"Podação\". O serviço de Poda e Corte de Árvores é disponibilizado
+através da Autarquia de Urbanismo e Paisagismo de Fortaleza-URBFOR. **A
+Poda é realizada para correção, manutenção, limpeza, tratamento de
+parasitas e desobstrução de sinalização de trânsito**.
+
+$Percentual\ podação = \ \frac{Total\ podação}{Total\ geral}x100$
+
+**Percentual de Entulho:** Este cálculo é para a categoria de
+\"Entulho\". São os **resíduos provenientes da construção civil ou de
+demolições**. São formados por um conjunto de fragmentos ou restos de
+tijolo, concreto, argamassa, aço, madeira e etc..
+
+$Percentual\ entulho = \ \frac{Total\ entulho}{Total\ geral}x100$
+
+**Percentual de Coleta Seletiva**: Este cálculo é para determinar qual
+porção do total é especificamente de \"Coleta Seletiva\". A **Coleta
+seletiva** é o recolhimento dos resíduos orgânicos e inorgânicos, secos
+ou úmidos, recicláveis e não recicláveis que são previamente separados
+na fonte geradora, recolhidos e levados para seu reaproveitamento.
+
+$Percentual\ coleta\ seletiva = \ \frac{Total\ seletiva}{Total\ geral}x100$
+
+Observação: em todos essas equações Total Geral é o total de lixo
+coletado em Fortaleza.
+
+**Gráficos do do Residuômetro:**
+
+Aqui temos dois tipos de gráficos:
+
+**Gráficos de Barras (Regional e Território):** Estes gráficos mostram o
+peso líquido dos resíduos coletados, divididos por regiões ou
+territórios. Eles ajudam a identificar quais áreas estão gerando mais
+resíduos. Os gráficos são interativos e podem incluir ferramentas para
+zoom, visualização de dados e possivelmente outras funcionalidades.
+
+**Séries Históricas (Gráficos de Linha)**: Estes gráficos mostram a
+tendência da coleta de resíduos ao longo dos anos. Eles podem ajudar a
+identificar padrões, aumentos ou diminuições na coleta de resíduos ao
+longo do tempo. Os dados são divididos por regional ou território,
+mostrando possivelmente como diferentes áreas têm mudado em termos de
+produção de resíduos.
+
+**Reciclômetro**
+
+**Equações utilizadas em nosso painel para a questão do Reciclômetro:**
+
+Da mesma forma que foi realizado o cálculo percentual no residuômetro
+aqui procedemos da mesma forma, ou seja calculamos o percentual de cada
+material coletado em relação ao total, o cálculo é feito em unidades de
+Kg. Aqui consideramos os seguintes materiais: Papel, vidro e plástico;
+Metal; óleo; volumoso e entulho.
+
+Vale ressaltar aqui que são lixos volumosos: **Limpeza de quintais,
+Restos de construção e Poda de árvores**. Eles NÃO PODEM ser descartados
+no lixo comum porque danificam a caixa com seu peso e danificam a parte
+hidráulica do caminhão compactador que não suporta esse tipo de lixo.
+
+**Gráficos do do Reciclômetro:**
+
+Aqui temos dois tipos de gráficos:
+
+1.  **Gráficos de Barras Empilhadas:** Estes mostram o \'peso líquido
+    > total\' por \'regional\' ou \'território\', dividido por tipo de
+    > material reciclado. Eles são usados em diferentes contextos dentro
+    > do aplicativo, como diário, mensal e anual. Os dados são agrupados
+    > por \'material\' e \'regional\' ou \'zgl\' (território), e o peso
+    > líquido total é calculado para cada um desses grupos.
+
+2.  **Gráficos de Linhas:** Estes são usados para mostrar **séries
+    > históricas** do \'peso líquido total\' por \'regional\'. Eles são
+    > separados em dois contextos: de 2018 a 2020, aqui na época em que
+    > existiam 6 regionais e também de 2021 a 2023, onde agora temos 12
+    > regionais. Os dados são **agrupados por \'ano\' e \'regional\', e
+    > o peso líquido total é calculado para cada grupo**
+
+Todos esses gráficos são interativos e são gerados usando a biblioteca
+echarts4r. Eles são configurados para serem exibidos dentro de uma
+aplicação Shiny, que permite a interatividade do usuário, como
+selecionar diferentes períodos de tempo para visualização (diário,
+mensal, anual) e visualizar detalhes específicos sobre os dados ao
+passar o mouse sobre os gráficos. Além disso, várias caixas de valor e
+textos de saída são usados para exibir informações numéricas e
+contextuais sobre os dados visualizados.
+
+**Frequência das coletas:**
+
+Na cidade de Fortaleza, a gestão de resíduos sólidos urbanos é uma
+operação contínua que prioriza a sustentabilidade e a eficiência na
+manipulação dos detritos produzidos diariamente por toda nossa
+população. Neste contexto, a coleta de resíduos segue um cronograma
+rigoroso de execução diária, garantindo a manutenção da higiene urbana e
+a prevenção de problemas de saúde pública e impactos ambientais
+adversos.
+
+Nosso painel desempenha um papel crucial, oferecendo uma perspectiva
+detalhada e multifacetada da frequência de coleta de resíduos. Este
+instrumento não se limita a apresentar dados **numa base diária**, mas
+expande sua análise para incluir escalas temporais mais amplas,
+abrangendo **períodos mensais e anuais.** Tal amplitude de observação é
+indispensável para compreender as tendências, avaliar a eficácia das
+estratégias implementadas e identificar oportunidades de melhoria ou
+necessidade de intervenção.
+
+Além disso, nosso painel não se restringe à supervisão dos resíduos
+tradicionais, mas também engloba materiais recicláveis, refletindo nosso
+compromisso com a economia circular e a sustentabilidade ambiental. Ao
+fazer isso, distinguimos e quantificamos os diversos materiais passíveis
+de reciclagem, monitorando sua frequência de coleta e, consequentemente,
+contribuindo para esforços de reciclagem e minimização de resíduos.
+
+Através da integração de dados e da apresentação de frequências de
+coleta variadas, o painel proporciona uma visão compreensiva que é
+essencial para stakeholders e decisores políticos. Esta ferramenta é
+vital para informar políticas públicas, promover a conscientização
+ambiental e social, e fomentar uma cultura de responsabilidade
+compartilhada entre cidadãos, empresas e instituições governamentais.
+
+**Mapa Interativo com Pontos de Coleta:**
+
+Este mapa mostra vários pontos de coleta de resíduos. Os pontos são
+marcados no mapa de acordo com as coordenadas geográficas dos locais de
+coleta de lixo.
+
+-   Os usuários podem interagir com o mapa, e com o uso do zoom in/out e
+    > visualizar informações sobre cada ponto de coleta ao clicar nos
+    > marcadores.
+
+-   Os marcadores no mapa são agrupados de forma interativa, o que ajuda
+    > a manter o mapa organizado e mais fácil de visualizar,
+    > especialmente quando há muitos pontos próximos uns dos outros.
+
+**Filtros e Seleções**: o nosso painel possui vários elementos
+interativos de UI (interface do usuário) que permitem ao usuário filtrar
+os resultados exibidos no mapa. Isso inclui:
+
+-   Selecionar um tipo específico de resíduo.
+
+-   Escolher um ponto de coleta específico.
+
+-   Selecionar um bairro específico.
+
+Essas seleções alteram dinamicamente o que é exibido no mapa, permitindo
+que os usuários personalizem a visualização com base em suas
+necessidades específicas.
+
+O painel também inclui elementos para melhorar a interação do usuário,
+incluindo:
+
+-   Caixas de diálogo modais que fornecem feedback, como informar ao
+    > usuário sobre a falta de pontos de coleta com base em sua seleção
+    > ou confirmar o recebimento de uma sugestão de resíduo.
+
+-   Um campo de entrada onde os usuários podem sugerir novos tipos de
+    > resíduos, aumentando a interatividade e o engajamento do usuário.
+
+**Mapa Interativo com Pontos de Entrega de lixo:**
+
+Este mapa mostra pontos de entrega de resíduos, permitindo aos usuários
+encontrar locais onde podem descartar diferentes tipos de resíduos.
+
+Este mapa é utilizado para:
+
+-   **Exibir Pontos de Entrega**: Mostrar locais específicos como pontos
+    > no mapa, onde cada ponto representa um local de entrega para
+    > reciclagem ou descarte de resíduos. Os usuários podem interagir
+    > com esses pontos para obter mais informações.
+
+-   **Informações Detalhadas em Pop-ups**: Quando um usuário clica em um
+    > ponto de entrega no mapa, um pop-up é exibido. Este pop-up contém
+    > informações detalhadas sobre esse ponto específico, incluindo o
+    > nome, tipo de ponto de entrega, endereço, recompensas oferecidas,
+    > e horários de funcionamento. Também há um link para visualizar a
+    > localização no Google Maps.
+
+-   **Agrupamento de Pontos e Zoom**: Para evitar a superlotação, os
+    > pontos próximos uns dos outros são agrupados, e os usuários podem
+    > clicar nesses grupos para fazer zoom e ver os pontos individuais.
+
+-   **Visualização de Áreas Geográficas**: O mapa também utiliza
+    > polígonos para ilustrar áreas geográficas, como os limites dos
+    > bairros. Isso ajuda os usuários a entenderem melhor a distribuição
+    > dos pontos de entrega.
+
+Além do mapa, o painel inclui vários elementos de interface com o
+usuário que não são gráficos, mas que permitem a entrada dinâmica e
+fornecem feedback visual. Por exemplo:
+
+-   **Seletores de Resíduos e Pontos de Entrega**: Os usuários podem
+    > selecionar um tipo específico de resíduo ou um ponto de entrega
+    > específico através de menus suspensos. Isso afeta o que é exibido
+    > no mapa.
+
+-   **Painéis de Informação**: Se um usuário seleciona um tipo de
+    > resíduo, painéis informativos são atualizados para mostrar
+    > detalhes sobre esse resíduo, incluindo a classe e o tipo do
+    > resíduo.
+
+-   **Sugestões e Feedback**: Há um campo onde os usuários podem enviar
+    > sugestões se não encontrarem o tipo de resíduo que desejam
+    > reciclar. Isso é acompanhado por uma mensagem de confirmação
+    > visual quando uma sugestão é enviada.
+
+O painel pode mostrar mensagens *pop-ups* para fornecer avisos ou
+informações adicionais. Por exemplo, se um resíduo específico faz parte
+de um programa de logística reversa, uma mensagem informará o usuário
+sobre isso.
+
+**Principais dados coletados pelos sistemas:**
+
+As fontes de dados para o monitoramento da gestão dos resíduos sólidos
+em Fortaleza incluem os sistemas utilizados pelos principais atores
+envolvidos, como SEGOV, IPLANFOR, CITINOVA, SCSP, ECOFOR AMBIENTAL,
+URBFOR, SEGER, SECRETARIAS REGIONAIS, ACFOR, SEFIN, AGEFIS, SEUMA, AMC e
+SME. Esses sistemas armazenam informações sobre as etapas do fluxo da
+gestão municipal de resíduos sólidos, como registros de submissão de
+Planos de Gerenciamento de Resíduos Sólidos (PGRS), ocorrências de
+denúncias e autos de infração.
+
+**Sistemas Utilizados para a Gestão de Resíduos Sólidos em Fortaleza**
+
+A Prefeitura Municipal de Fortaleza utiliza os seguintes sistemas para o
+monitoramento e avaliação dos serviços relacionados aos resíduos
+sólidos:
+
+1.  SSX (SystemsatX): Software utilizado para o rastreamento das rotas
+    > da Coleta Especial Urbana.
+
+2.  Inlog Pro-Collect: Solução de rastreamento de frota utilizada para o
+    > rastreamento de rotas e veículos da Coleta Domiciliar.
+
+3.  ERP: Sistema integrado desenvolvido pelo Grupo Marquise para a
+    > gestão de resíduos da construção civil, resíduos de grandes
+    > geradores e planos de gestão de resíduos sólidos.
+
+4.  Coletas Online: Solução desenvolvida pelo Grupo Marquise para a
+    > gestão de resíduos da construção civil, resíduos de grandes
+    > geradores e planos de gestão de resíduos sólidos.
+
+5.  Fiscalize: Solução desenvolvida pela AGEFIS para o registro e
+    > consulta das demandas feitas pelos cidadãos.
+
+6.  SISGEP: Solução utilizada pela SCSP para o registro e consulta de
+    > protocolos e ocorrências provenientes do canal 156.
+
+7.  BigFor: Sistema desenvolvido pela Transitar Consultoria para a AMC,
+    > utilizado para a análise das imagens das câmeras de monitoramento.
+
+8.  Licenciamento Digital Autodeclaratório: Sistema desenvolvido pela
+    > SEUMA para emissão de licenças ambientais, de construção e de
+    > funcionamento, incluindo o registro e consulta dos Planos de
+    > Gerenciamento de Resíduos Sólidos (PGRS).
+
+9.  Coletas RGG: Sistema utilizado para a gestão de resíduos sólidos
+
+10. Coletas RCC: Sistema utilizado para a gestão de resíduos sólidos
+
+11. Fortaleza + Limpa: Sistema utilizado para a gestão de resíduos
+    > sólidos, mas não foi mencionado o acesso ao banco de dados.
+
+Esses sistemas são utilizados para registrar e monitorar as etapas do
+fluxo da gestão municipal de resíduos sólidos, permitindo uma maior
+integração de fluxos entre os diferentes atores e uma percepção
+holística da eficiência das políticas de resíduos sólidos no município.

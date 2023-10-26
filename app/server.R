@@ -1,5 +1,6 @@
 box::use(
   shiny[...],
+  shinyjs,
   bs4Dash[...]
 )
 
@@ -16,21 +17,17 @@ box::use(
 
 #' @export
 server <- function(input, output, session) {
+  
   useAutoColor()
 
-  ## observeEvent(input$current_tab, {
-  ##   if (input$current_tab == "cartoes") {
-  ##     showModal(modalDialog(
-  ##       title = "Este evento é iniciado apenas para a primeira aba!",
-  ##       "Este evento é o resultado de se vincular um input
-  ##         ao menu, adicionando um id ao sidebarMenu. Assim, a
-  ##         variável input$id irá armazenar a aba selecionada
-  ##         atualmente.",
-  ##       easyClose = TRUE,
-  ##       footer = NULL
-  ##     ))
-  ##   }
-  ## })
+  query <- isolate(getQueryString())
+
+  if(length(query) != 0) {
+    if(query$page == "entrega") {
+      shinyjs::hideElement(selector = "#sidebar")
+      updateTabItems(inputId = "current_tab", selected = "pontos_entrega")
+    }
+  }
 
   observeEvent(input$dark_mode, {
     t <- if (input$dark_mode) "escuro" else "claro"

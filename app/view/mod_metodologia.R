@@ -30,10 +30,6 @@ box::use(
 
 
 
-
-
-
-
 ui <- function(id){
   ns <- NS(id)
  
@@ -55,22 +51,33 @@ ui <- function(id){
   )
 }
     
+
+
+
+
+
 #' metodologia Server Functions
 #'
 #' @noRd 
 server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
-    ## output$metodologia <- renderUI({
-    ##   includeRMarkdown('inst/app/md/metodologia.md')
-    ## })
- 
-  })
-}
     
+    html_content <- readLines("rmd_files/metodologia.html")
+
+    output$metodologia <- renderUI({
+
+      # Renderize o Rmd para HTML
+      #html_output <- rmarkdown::render("rmd_files/metodologia.Rmd", output_format = "html_document")
+      # Certifique-se de fornecer o caminho correto para o seu arquivo .Rmd
+      html_content
+      tags$iframe(srcdoc = paste(html_content, collapse = "\n"), style = "width:100%; height:600px;")
+  })
+})
+}
 ## To be copied in the UI
 # mod_metodologia_ui("metodologia_1")
     
 ## To be copied in the server
 # mod_metodologia_server("metodologia_1")
+
