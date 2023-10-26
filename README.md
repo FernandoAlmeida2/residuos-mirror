@@ -14,7 +14,7 @@ O projeto pode ser visto em https://observatoriodefortaleza.fortaleza.ce.gov.br/
 - Pode incluir aqui também uma lista de features ainda não implementadas / próximos passos.<> -->
 
 
-Funcionalidades:
+Serviços disponíveis:
 
 - Residuômetro: Números gerais da coleta de resíduos em Fortaleza por dia, mês e ano, e série histórica (2018-2023), além de gráficos segmentados por regional e território.
 
