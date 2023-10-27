@@ -275,16 +275,18 @@ grafico_regional <- function(df) {
     e_chart(regional) %>%
     e_bar(peso_total, stack="grp") %>%
     e_tooltip(
-      formatter = htmlwidgets::JS("
-                                            function(params) {
-                                                  return '<span>'
-                                                          + params.value[0] + '<br/>'
-                                                        + params.seriesName + '<br/>'
-                                                        + parseFloat(params.value[1]).toLocaleString('pt-BR')
-                                                      + ' t'
-                                                      + '</span>';
-                                          }"
-                                  )
+      formatter = htmlwidgets::JS(
+        "
+          function(params) {
+            return '<span>'
+              + params.value[0] + '<br/>'
+              + params.seriesName + '<br/>'
+              + parseFloat(params.value[1])
+                  .toLocaleString('pt-BR', {style: 'decimal',
+                                               maximumFractionDigits: params.value[1] < 1 ? 4 : 1})
+              + ' t'
+              + '</span>';
+        }")
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
     e_legend(show = TRUE) %>%
@@ -297,15 +299,15 @@ grafico_vl_regional <- function(df) {
     e_chart(regional) %>%
     e_bar(vl_total, stack="grp") %>%
     e_tooltip(
-      formatter = htmlwidgets::JS("
-                                            function(params) {
-                                                  return '<span>'
-                                                          + params.value[0] + '<br/>'
-                                                        + params.seriesName + '<br/>'
-                                                        + 'R$ ' + parseFloat(params.value[1]).toLocaleString('pt-BR')
-                                                      + '</span>';
-                                          }"
-                                  )
+      formatter = htmlwidgets::JS(
+      "
+        function(params) {
+          return '<span>'
+            + params.value[0] + '<br/>'
+            + params.seriesName + '<br/>'
+            + 'R$ ' + parseFloat(params.value[1]).toLocaleString('pt-BR')
+            + '</span>';
+      }")
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
     e_legend(show = TRUE) %>%
@@ -317,15 +319,15 @@ grafico_vl_ecoponto <- function(df) {
     e_chart(ecoponto) %>%
     e_bar(vl_total, stack="grp") %>%
     e_tooltip(
-      formatter = htmlwidgets::JS("
-                                            function(params) {
-                                                  return '<span>'
-                                                          + params.value[0] + '<br/>'
-                                                        + params.seriesName + '<br/>'
-                                                        + 'R$  ' + parseFloat(params.value[1]).toLocaleString('pt-BR')
-                                                      + '</span>';
-                                          }"
-                                  )
+      formatter = htmlwidgets::JS(
+        "
+          function(params) {
+            return '<span>'
+              + params.value[0] + '<br/>'
+              + params.seriesName + '<br/>'
+              + 'R$  ' + parseFloat(params.value[1]).toLocaleString('pt-BR')
+                + '</span>';
+          }")
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
     e_legend(show = TRUE) %>%
@@ -337,16 +339,16 @@ grafico_ecoponto <- function(df) {
     e_chart(ecoponto) %>%
     e_bar(peso_total, stack="grp") %>%
     e_tooltip(
-      formatter = htmlwidgets::JS("
-                                            function(params) {
-                                                  return '<span>'
-                                                          + params.value[0] + '<br/>'
-                                                        + params.seriesName + '<br/>'
-                                                        + parseFloat(params.value[1]).toLocaleString('pt-BR')
-                                                      + ' t'
-                                                      + '</span>';
-                                          }"
-                                  )
+      formatter = htmlwidgets::JS(
+        "
+           function(params) {
+              return '<span>'
+              + params.value[0] + '<br/>'
+              + params.seriesName + '<br/>'
+              + parseFloat(params.value[1]).toLocaleString('pt-BR', {style: 'decimal', maximumFractionDigits: 1})
+              + ' t'
+              + '</span>';
+           }")
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
     e_legend(show = TRUE) %>%

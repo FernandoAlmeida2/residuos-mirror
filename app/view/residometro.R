@@ -292,15 +292,16 @@ grafico_regional <- function(df) {
     e_bar(peso_liquido_total, stack="grp") %>%
     e_tooltip(
       formatter = htmlwidgets::JS("
-            function(params) {
-              return '<span>'
-              + params.value[0] + '<br/>'
-              + params.seriesName + '<br/>'
-              + parseFloat(params.value[1]).toLocaleString('pt-BR')
-              + ' t'
-              + '</span>';
-            }"
-            )
+        function(params) {
+          return '<span>'
+          + params.value[0] + '<br/>'
+          + params.seriesName + '<br/>'
+          + parseFloat(params.value[1])
+              .toLocaleString('pt-BR', {style: 'decimal',
+                                          maximumFractionDigits: params.value[1] < 1000 ? 2 : 0})
+          + ' t'
+          + '</span>';
+        }")
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
     e_legend(show = TRUE) %>%
@@ -321,7 +322,9 @@ grafico_territorio <- function(df) {
               return '<span>'
               + params.value[0] + '<br/>'
               + params.seriesName + '<br/>'
-              + parseFloat(params.value[1]).toLocaleString('pt-BR')
+              + parseFloat(params.value[1])
+                .toLocaleString('pt-BR',
+                   {style: 'decimal', maximumFractionDigits: params.value[1] < 1000 ? 2 : 0})
               + ' t'
               + '</span>';
             }"
