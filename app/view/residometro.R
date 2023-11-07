@@ -750,7 +750,6 @@ server <- function(id) {
             peso_liquido = as.numeric(peso_liquido)
           )
       })) %>%
-        filter(ano >= 2018 & ano <= 2020) %>%
         mutate(ano = as.factor(ano)) %>%
         filtra_regional %>%
         group_by(ano, regional) %>% 
@@ -776,7 +775,6 @@ server <- function(id) {
               peso_liquido = as.numeric(peso_liquido)
             )
         })) %>%
-          filter(ano >= 2021 & ano <= 2023) %>%
           mutate(ano = as.factor(ano)) %>%
           filtra_regional %>%
           group_by(ano, regional) %>% 
