@@ -160,7 +160,7 @@ server <- function(id) {
         
         leaflet(data = intersect_setores) |>
           addTiles() |>
-          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Norturno", "Integral"),
+          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Noturno", "Integral"),
                     opacity = 1) |>
           addPolygons(weight = 3, color = ~paste(polygonColors[Turno]), opacity = 1,
                       popup = ~paste(
