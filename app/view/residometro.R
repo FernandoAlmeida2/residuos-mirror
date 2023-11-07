@@ -7,7 +7,8 @@ box::use(
     mutate,
     filter,
     pull,
-    glimpse
+    glimpse,
+    ungroup
   ],
   echarts4r[...],
   magrittr[`%>%`],
@@ -30,11 +31,11 @@ update_data <- function(obsr, year, last_data) {
   tblname <- sprintf("br_acfor_relatorio_pesagem_%04d", year)
 
   dplyr::tbl(obsr, tblname) %>%
-    filter(data_saida == last_data) %>%
+    filter(data_entrada == last_data) %>%
     mutate(
-      dia = as.integer(substring(data_saida, 1, 2)),
-      mes = as.integer(substring(data_saida, 4, 5)),
-      ano = as.integer(substring(data_saida, 7, 10)),
+      dia = as.integer(substring(data_entrada, 1, 2)),
+      mes = as.integer(substring(data_entrada, 4, 5)),
+      ano = as.integer(substring(data_entrada, 7, 10)),
       peso_liquido = as.numeric(peso_liquido)
     ) %>%
     collect
@@ -283,24 +284,32 @@ ui <- function(id) {
 }
 
 grafico_regional <- function(df) {
-  df %>%
-    filtra_regional %>%
+  
+  df_filtered <- df %>% filtra_regional
+  
+  regional_order <- df_filtered %>%
+    group_by(regional) %>%
+    summarise(peso_liquido_total = sum(peso_liquido)) %>%
+    arrange(-peso_liquido_total)
+  
+  df_filtered %>%
     group_by(material, regional) %>% 
-    summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>% 
-    arrange(-peso_liquido_total) %>%
-    e_chart(regional) %>% 
+    summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
+    arrange(factor(regional, levels = regional_order$regional)) %>%
+    e_chart(regional, reorder = FALSE) %>%
     e_bar(peso_liquido_total, stack="grp") %>%
     e_tooltip(
       formatter = htmlwidgets::JS("
-            function(params) {
-              return '<span>'
-              + params.value[0] + '<br/>'
-              + params.seriesName + '<br/>'
-              + parseFloat(params.value[1]).toLocaleString('pt-BR')
-              + ' t'
-              + '</span>';
-            }"
-            )
+        function(params) {
+          return '<span>'
+          + params.value[0] + '<br/>'
+          + params.seriesName + '<br/>'
+          + parseFloat(params.value[1])
+              .toLocaleString('pt-BR', {style: 'decimal',
+                                          maximumFractionDigits: params.value[1] < 1000 ? 2 : 0})
+          + ' t'
+          + '</span>';
+        }")
     ) %>%
     e_y_axis(formatter = e_axis_formatter(locale = "pt-BR")) %>%
     e_legend(show = TRUE) %>%
@@ -308,12 +317,20 @@ grafico_regional <- function(df) {
 }
 
 grafico_territorio <- function(df) {
-  df %>%
-    filter(stringr::str_detect(zgl, "^TERRITORIO")) %>%
+  
+  df_filtered <- df %>%
+    filter(stringr::str_detect(zgl, "^TERRITORIO"))
+  
+  zgl_order <- df_filtered %>%
+    group_by(zgl) %>%
+    summarise(peso_liquido_total = sum(peso_liquido)) %>%
+    arrange(-peso_liquido_total)
+  
+  df_filtered %>%
     group_by(material, zgl) %>% 
     summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
-    arrange(-peso_liquido_total) %>%
-    e_chart(zgl) %>% 
+    arrange(factor(zgl, levels = zgl_order$zgl)) %>%
+    e_chart(zgl, reorder = FALSE) %>% 
     e_bar(peso_liquido_total, stack="grp") %>%
     e_tooltip(
       formatter = htmlwidgets::JS("
@@ -321,7 +338,9 @@ grafico_territorio <- function(df) {
               return '<span>'
               + params.value[0] + '<br/>'
               + params.seriesName + '<br/>'
-              + parseFloat(params.value[1]).toLocaleString('pt-BR')
+              + parseFloat(params.value[1])
+                .toLocaleString('pt-BR',
+                   {style: 'decimal', maximumFractionDigits: params.value[1] < 1000 ? 2 : 0})
               + ' t'
               + '</span>';
             }"
@@ -342,14 +361,14 @@ server <- function(id) {
     curr_year <- lubridate::year(today)
     curr_month <- lubridate::month(today)
     curr_year_tblname <- sprintf("br_acfor_relatorio_pesagem_%04d", curr_year)
-    query_data <- sprintf('SELECT data_saida FROM %s ORDER BY ".db_pkid" DESC LIMIT 1', curr_year_tblname)
-    last_data <- dplyr::collect(dplyr::tbl(obsr, dplyr::sql(query_data)))$data_saida
+    query_data <- sprintf('SELECT data_entrada FROM %s ORDER BY ".db_pkid" DESC LIMIT 1', curr_year_tblname)
+    last_data <- dplyr::collect(dplyr::tbl(obsr, dplyr::sql(query_data)))$data_entrada
 
     pesagem_anual <- dplyr::tbl(obsr, curr_year_tblname) %>%
       mutate(
-        dia = as.integer(substring(data_saida, 1, 2)),
-        mes = as.integer(substring(data_saida, 4, 5)),
-        ano = as.integer(substring(data_saida, 7, 10)),
+        dia = as.integer(substring(data_entrada, 1, 2)),
+        mes = as.integer(substring(data_entrada, 4, 5)),
+        ano = as.integer(substring(data_entrada, 7, 10)),
         peso_liquido = as.numeric(peso_liquido)
       ) %>%
       collect
@@ -696,9 +715,9 @@ server <- function(id) {
     output$residometro_anual_heatmap <- renderEcharts4r({
       res <- pesagem_anual %>%
         mutate(
-          data_saida = as.Date(data_saida, "%d/%m/%Y")
+          data_entrada = as.Date(data_entrada, "%d/%m/%Y")
         ) %>%
-        group_by(data_saida) %>%
+        group_by(data_entrada) %>%
         summarise(total = to_ton(sum(peso_liquido)))
 
 
@@ -711,7 +730,7 @@ server <- function(id) {
         max
 
       res %>%
-        e_charts(data_saida) %>%
+        e_charts(data_entrada) %>%
         e_calendar(range = curr_year) %>%
         e_heatmap(total, coord_system = "calendar") %>%
         e_visual_map(min = min_val, max = max_val)
@@ -725,9 +744,9 @@ server <- function(id) {
         dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
           collect %>%
           mutate(
-            dia = as.integer(substring(data_saida, 1, 2)),
-            mes = as.integer(substring(data_saida, 4, 5)),
-            ano = as.integer(substring(data_saida, 7, 10)),
+            dia = as.integer(substring(data_entrada, 1, 2)),
+            mes = as.integer(substring(data_entrada, 4, 5)),
+            ano = as.integer(substring(data_entrada, 7, 10)),
             peso_liquido = as.numeric(peso_liquido)
           )
       })) %>%
@@ -747,25 +766,25 @@ server <- function(id) {
     
     output$residometro_serie_hist_regional <- renderEcharts4r({
       
-      dplyr::bind_rows(lapply(2021:2023, function(ano){
-        dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
-          collect %>%
-          mutate(
-            dia = as.integer(substring(data_saida, 1, 2)),
-            mes = as.integer(substring(data_saida, 4, 5)),
-            ano = as.integer(substring(data_saida, 7, 10)),
-            peso_liquido = as.numeric(peso_liquido)
-          )
-      })) %>%
-        filter(ano >= 2021 & ano <= 2023) %>%
-        mutate(ano = as.factor(ano)) %>%
-        filtra_regional %>%
-        group_by(ano, regional) %>% 
-        summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
-        group_by(regional) %>%
-        e_chart(ano) %>% 
-        e_line(peso_liquido_total) %>%
-        format_bar_plot(show_legend = TRUE)
+        dplyr::bind_rows(lapply(2021:2023, function(ano){
+          dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
+            collect %>%
+            mutate(
+              dia = as.integer(substring(data_entrada, 1, 2)),
+              mes = as.integer(substring(data_entrada, 4, 5)),
+              ano = as.integer(substring(data_entrada, 7, 10)),
+              peso_liquido = as.numeric(peso_liquido)
+            )
+        })) %>%
+          filter(ano >= 2021 & ano <= 2023) %>%
+          mutate(ano = as.factor(ano)) %>%
+          filtra_regional %>%
+          group_by(ano, regional) %>% 
+          summarise(peso_liquido_total = to_ton(sum(peso_liquido))) %>%
+          group_by(regional) %>%
+          e_chart(ano) %>% 
+          e_line(peso_liquido_total) %>%
+          format_bar_plot(show_legend = TRUE)
     }) %>%
       bindCache(nrow(pesagem_anual))
     
@@ -774,9 +793,9 @@ server <- function(id) {
     #     dplyr::tbl(obsr, sprintf("br_acfor_relatorio_pesagem_%04d", ano)) %>%
     #       collect %>%
     #       mutate(
-    #         dia = as.integer(substring(data_saida, 1, 2)),
-    #         mes = as.integer(substring(data_saida, 4, 5)),
-    #         ano = as.integer(substring(data_saida, 7, 10)),
+    #         dia = as.integer(substring(data_entrada, 1, 2)),
+    #         mes = as.integer(substring(data_entrada, 4, 5)),
+    #         ano = as.integer(substring(data_entrada, 7, 10)),
     #         peso_liquido = as.numeric(peso_liquido)
     #       )
     #   })) %>%

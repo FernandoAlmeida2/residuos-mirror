@@ -148,7 +148,8 @@ server <- function(id) {
         #                                    intersection = sf::st_intersection(geometry, bairro_choice_shape))
         
         intersect_column <- lapply(setores_shapes$geometry, function(setor) {
-          return(sf::st_crosses(sf::st_boundary(bairro_choice_shape), sf::st_boundary(setor))[1] == 1)
+          #return(sf::st_crosses(sf::st_boundary(bairro_choice_shape), sf::st_boundary(setor))[1] == 1)
+          return(sf::st_intersects(bairro_choice_shape, setor)[1] == 1)
         })
 
         setores_shapes$is_intersect <- intersect_column
@@ -159,7 +160,7 @@ server <- function(id) {
         
         leaflet(data = intersect_setores) |>
           addTiles() |>
-          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Norturno", "Integral"),
+          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Noturno", "Integral"),
                     opacity = 1) |>
           addPolygons(weight = 3, color = ~paste(polygonColors[Turno]), opacity = 1,
                       popup = ~paste(
