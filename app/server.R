@@ -24,8 +24,21 @@ server <- function(input, output, session) {
 
   if(length(query) != 0) {
     if(query$page == "entrega") {
-      shinyjs::hideElement(selector = "#sidebar")
       updateTabItems(inputId = "current_tab", selected = "pontos_entrega")
+      shinyjs::addClass(selector = "nav", class = "d-none")
+      shinyjs::addClass(selector = "footer", class = "d-none")
+      shinyjs::hideElement(selector = "#sidebar")
+      shinyjs::removeClass(selector = ".content-wrapper", class = "content-wrapper")
+    }
+    
+    if(query$page == "coleta") {
+      #shinyjs::addClass(selector = "body", class = "sidebar-collapse")
+      updateTabItems(inputId = "current_tab", selected = "pontos_coleta")
+      shinyjs::addClass(selector = "nav", class = "d-none")
+      shinyjs::addClass(selector = "footer", class = "d-none")
+      shinyjs::removeClass(selector = ".content-wrapper", class = "content-wrapper")
+      shinyjs::addClass(selector = "#sidebar", class = "d-none")
+      #shinyjs::hideElement(selector = "#sidebar")
     }
   }
 

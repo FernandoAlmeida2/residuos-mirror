@@ -21,17 +21,17 @@ box::use(leaflet[...],
          ../mod/utils[trata_string]
 )
 
-filterPanel <- function (..., width = 4)
-{
-  div(class = paste0("filtro text-white col-sm-", width),
-      tags$form(class = "well", 
-                role = "complementary", ...))
-}
-
-plotPanel <- function (..., width = 8)
-{
-  div(class = paste0("grafico pt-4 col-sm-", width), role = "main", ...)
-}
+# filterPanel <- function (..., width = 4)
+# {
+#   div(class = paste0("filtro text-white col-sm-", width),
+#       tags$form(class = "well", 
+#                 role = "complementary", ...))
+# }
+# 
+# plotPanel <- function (..., width = 8)
+# {
+#   div(class = paste0("grafico pt-4 col-sm-", width), role = "main", ...)
+# }
 
 setores_shapes <- sf::st_read("data/ColetaDomiciliarSetorizacao.geojson")
 setores_shapes[c("Turno", "Freq_semanal")] <- stringr::str_split_fixed(setores_shapes$FREQUENCIA, ' ', 2)
@@ -55,40 +55,35 @@ bairros <- c("Todos", sort(unique(bairros_shapes$Nome)))
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  div(
-    class = "bg-secondary min-vh-100 pt-4",
-    fluidPage(
-      tagList(
+  fluidPage(
+    tags$head(includeCSS("www/custom.css")),
+    tagList(
+      div(
+        class = "coleta-container maps-service d-flex justify-content-between",
         div(
-          class = "bg-secondary min-vh-100 p-5",
-          sidebarLayout(
-            filterPanel(
-              class = "text-white d-flex align-items-center flex-column pr-4",
-              div(
-                class = "position-relative w-100",
-                img(class = "mt-n5 ml-n4 position-absolute z-index-1 top-0 left-0", src="logo_maps.png",
-                    width="230rem")
-              ),
-              h4("Encontre aqui as informações",br(),
-                 "sobre os dias e turno da coleta",br(),
-                 "domiciliar em seu bairro!", br(), br(),
-                 class="text-center position-relative z-index-2 font-weight-bold mb-2"
-              ),
-              div(
-                class = "col-sm-10",
-                h5("Selecione o seu"),
-                selectInput(
-                  inputId = ns("bairro"),
-                  label = h5("BAIRRO", class = "font-weight-bold"),
-                  choices = bairros
-                )
-              )
-            ),
-            plotPanel(
-              leafletOutput(ns("plot"), height = "40rem"),
-              class = "plot"
+          class = "maps-filter text-primary d-flex align-items-center flex-column",
+          div(
+            class = "position-relative w-100 logo-wave",
+            img(class = "mt-n5 ml-n4 position-absolute z-index-1 top-0 left-0", src="logo_maps.png",
+                width="30%")
+          ),
+          h4("Encontre aqui as informações sobre os dias e turno da coleta domiciliar em seu bairro!",
+             class="title-option text-start position-relative z-index-2 font-weight-bold"
+          ),
+          div(
+            class = "filter-box",
+            h5(class="subtitle-option", "Selecione o seu"),
+            selectInput(
+              inputId = ns("bairro"),
+              label = h5("BAIRRO", class = "font-weight-bold"),
+              choices = bairros,
+              width = "100%"
             )
           )
+        ),
+        div(
+          leafletOutput(ns("coleta_plot"), height = "95%"),
+          class = "maps-plot plot"
         )
       )
     )
@@ -119,7 +114,7 @@ server <- function(id) {
                                                              "Presidente Kennedy",
                                                              "São Gerardo"))
     
-    output$plot <- renderLeaflet({
+    output$coleta_plot <- renderLeaflet({
       req(input$bairro)
       
      # setores_shapes <- dplyr::mutate(setores_shapes,
@@ -129,10 +124,10 @@ server <- function(id) {
       if(input$bairro == "Todos") {
         leaflet(data = setores_shapes) |>
           addTiles() |>
-          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Norturno", "Integral"),
+          addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Noturno", "Integral"),
                     opacity = 1) |>
           #addPolygons(data = bairros_bug, weight = 5, color = "#00ffd8", opacity = 0.5) |>
-          addPolygons(weight = 3, color = ~paste(polygonColors[Turno]), opacity = 1,
+          addPolygons(weight = 2, color = ~paste(polygonColors[Turno]), opacity = 1,
                       popup = ~paste(
                         paste('<b>', 'Nome:', '</b>', NOME),
                         paste('<b>', 'Dias de coleta:', '</b>', Freq_semanal),
@@ -162,7 +157,7 @@ server <- function(id) {
           addTiles() |>
           addLegend(position = "topright", colors = polygonColors, labels = c("Diurno", "Noturno", "Integral"),
                     opacity = 1) |>
-          addPolygons(weight = 3, color = ~paste(polygonColors[Turno]), opacity = 1,
+          addPolygons(weight = 2, color = ~paste(polygonColors[Turno]), opacity = 1,
                       popup = ~paste(
                         paste('<b>', 'Nome:', '</b>', NOME),
                         paste('<b>', 'Dias de coleta:', '</b>', Freq_semanal),

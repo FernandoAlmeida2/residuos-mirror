@@ -34,6 +34,20 @@ trata_string <- function (word) {
 }
 
 #' @export
+remove_acentos_uppercase <- function (word) {
+  gsub("Á","A",
+         gsub("É","E",
+              gsub("Í","I",
+                   gsub("Ó","O",
+                        gsub("Ú","U",
+                             gsub("Ã","A",
+                                  gsub("Õ","O",
+                                       gsub("Ç","C",
+                                            gsub("Â","A",
+                                                 gsub("Ô","O",word))))))))))
+}
+  
+#' @export
 day_month_br_format <- function (date) {
   paste0(substr(date, 9, 10),"/",substr(date, 6, 7), "/",substr(date, 1, 4))
 }

@@ -10,11 +10,11 @@ Amianto,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Antenas de TV,Especial,Misto,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1
 Antenas parabólicas,Especial,Misto,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1
 Aparelhos de ar condicionado,Especial,Volumoso,1,1,0,0,1,1,0,1,1,0,0,0,0,0,0,1
-Aparelhos de barbear descartáveis,Comum,Misto,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+Aparelhos de barbear descartáveis,Comum,Misto,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1
 Aparelhos de barbear elétricos,Comum,Eletrônicos,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Aparelhos de telefone,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
 Árvores,Comum,Orgânico/Poda,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
-Aspiradores de pó,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+Aspiradores de pó,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Baldes,Comum,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Bandejas de plástico,Comum,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Baterias Automotivas,Reciclável,Tóxico,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
@@ -24,7 +24,7 @@ Bicicletas,Reciclável,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
 Bijouterias,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Bolsas,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Bombonas,Comum,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Brinquedos e jogos,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Brinquedos e jogos,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Cadernos,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Cafeteiras,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Caixa de Ovo,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
@@ -33,60 +33,60 @@ Caixas de som,Comum,Misto,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0
 Calçados,Reciclável,Têxtil,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Calçados esportivos - tênis,Reciclável,Têxtil,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Calculadoras,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
-"Cama, mesa e banho",Comum,Têxtil,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"Cama, mesa e banho",Comum,Têxtil,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Câmeras digitais,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
-Canudo de plástico,Comum,Plástico,1,1,0,0,1,1,0,1,0,1,0,1,0,1,0,0
-Cápsulas de café,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Canudo de plástico,Comum,Plástico,1,1,1,0,1,1,0,1,0,1,0,1,0,1,0,0
+Cápsulas de café,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Carregadores de celular,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
 Carregadores de eletrônicos - outros,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
-Cartões de crédito e débito,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Cartões de crédito e débito,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Cartuchos de impressora,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
-CDs/DVDs,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
+CDs/DVDs,Reciclável,Eletrônicos,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1
 Celulares,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
 Celulares - acessórios,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
-Cerâmicas,Comum,Entulho,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0
+Cerâmicas,Comum,Entulho,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0
 Chapas de Raio-X,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Chapas de Vidro Revestidas,Especial,Misto,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1
 Chapas de Vidro Simples,Especial,Misto,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1
-Chinelo de borracha,Comum,Borracha (Misto),1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1
-Chuveiros elétricos,Comum,Eletrônicos,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+Chinelo,Comum,Borracha (Misto),1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1
+Chuveiros elétricos,Comum,Eletrônicos,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1
 Colchões,Reciclável,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Comprovantes de cartão de crédito,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Comprovantes de cartão de crédito,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Computadores,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Computadores - gabinetes,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Construção e Demolição,Especial,Entulho,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
-"Copos descartáveis (café, água, cerveja, etc.)",Comum,Plástico,1,1,0,0,1,1,0,1,0,1,0,1,0,1,0,0
-Cosméticos,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-Cotonete,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-Decoração,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-Diversos,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"Copos descartáveis (café, água, cerveja, etc.)",Comum,Plástico,1,1,1,0,1,1,0,1,0,1,0,1,0,1,0,0
+Cosméticos,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+Cotonete,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+Decoração,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+Diversos,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Drives,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Eletrodomésticos,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,1,0,0,0,0,0,0,1
 Eletrônicos,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
-Embalagem cartonada,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Embalagens de detergentes e de produtos de limpeza,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Embalagens de margarina,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Embalagens de massas e biscoitos,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Embalagens de xampus e de produtos de higiene pessoal,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Embalagens longa vida,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Embalagens plásticas,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Embalagem cartonada,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Embalagens de detergentes e de produtos de limpeza,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Embalagens de margarina,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Embalagens de massas e biscoitos,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Embalagens de xampus e de produtos de higiene pessoal,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Embalagens longa vida,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Embalagens plásticas,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Entulhos,Especial,Entulho,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
-Envelopes,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-"Envelopes de adoçantes em pó (açúcar, sal, etc.)",Comum,Misto,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0
-Envelopes de janela,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Escovas de dentes,Comum,Misto,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0
-Esmaltes,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Envelopes,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+"Envelopes de adoçantes em pó (açúcar, sal, etc.)",Comum,Misto,1,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0
+Envelopes de janela,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Escovas de dentes,Comum,Misto,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0
+Esmaltes,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Espelhos,Comum,Misto,1,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0
-Esponjas,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Esponjas,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Estabilizadores,Comum,Misto,1,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0
-Extratos bancários (papel termo-sensível),Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Ferragens,Comum,Metal,1,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0
+Extratos bancários (papel termo-sensível),Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Ferragens,Comum,Metal,1,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0
 Ferro Lata,Reciclável,Metal,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Ferros de passar roupa,Comum,Metal,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Ferros de passar roupa,Comum,Metal,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Filme Cristal,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
 Filme Misto,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
 Filme Preto,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
-Filmes plásticos,Comum,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
+Filmes plásticos,Comum,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,0,0,0
 Filtros de linha,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Filtros e purificadores de água,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Fios e cabos elétricos,Reciclável,Metal (Cobre),1,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0
@@ -94,17 +94,17 @@ Fios e cabos eletrônicos,Reciclável,Metal (Cobre),1,1,0,0,1,1,0,1,0,0,0,0,0,0,
 Fitas cassetes,Reciclável,Eletrônicos,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Fitas de videocassete,Reciclável,Eletrônicos,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Fogões,Comum,Misto,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Folhas,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Folhas usadas,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Folhas,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Folhas usadas,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Fontes,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
 Fornos de microondas,Comum,Misto,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Fotografias,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
-Fraldas descartáveis,Comum,Orgânico,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+Fotografias,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,0,0,0
+Fraldas descartáveis,Comum,Orgânico,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0
 Freezers,Reciclável,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
 Gabinetes de aparelhos de som e TV,Comum,Eletrônicos,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1
-Garrafas de vidro,Reciclável,Vidro,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Garrafas plásticas - outras,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Garrafas plásticas - PET,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Garrafas de vidro,Reciclável,Vidro,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Garrafas plásticas - outras,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Garrafas plásticas - PET,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Geladeiras,Reciclável,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
 Gravadores de voz,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 HDs (Interno/Externo),Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
@@ -112,29 +112,29 @@ Home theaters,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 "Hubs, roteadores e switchers",Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Impressoras,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
 Impressoras - toners,Reciclável,Eletrônicos,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,1
-Isopor,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
-Jornais,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
+Isopor,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,0,0,0
+Jornais,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,0,0,0
 Lâmpadas,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Lâmpadas Fluorescentes,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Lâmpadas Halógenas,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Lâmpadas Incandescentes,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
-Lata de aço,Reciclável,Metal (Aço),1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Lata de aerossol,Reciclável,Metal (Aço),1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Lata de alumínio,Reciclável,Metal (Alumínio),1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Lata de aço,Reciclável,Metal (Aço),1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Lata de aerossol,Reciclável,Metal (Aço),1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Lata de alumínio,Reciclável,Metal (Alumínio),1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Liquidificadores e processadores,Comum,Eletrônicos,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,1
 Líquidos e Produtos Químicos,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
-Listas telefônicas,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Livros,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Listas telefônicas,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Livros,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 "Longa Vida - Embalagens de Bebidas de até 2,5L com exceção de Lácteos",Reciclável,Misto,1,1,0,1,1,1,0,1,0,0,0,1,0,0,0,0
 Madeiras,Reciclável,Orgânico/Poda,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Maquiagens,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+Maquiagens,Comum,Misto,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
 Máquinas de escrever,Reciclável,Misto,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0
 Máquinas lavadoras de pratos,Comum,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
 Máquinas lavadoras de roupas,Comum,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
 Máquinas secadoras de roupas,Comum,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Materiais de limpeza doméstica,Comum,Misto,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Materiais Orgânicos,Comum,Orgânico,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
-Material escolar,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Materiais de limpeza doméstica,Comum,Misto,1,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0
+Materiais Orgânicos,Comum,Orgânico,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0
+Material escolar,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Medicamentos,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1
 Melissa,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Metais,Reciclável,Metal,1,1,0,0,1,1,0,1,1,0,0,1,0,1,0,0
@@ -147,40 +147,40 @@ Móveis de madeira,Reciclável,Entulho,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
 Móveis de metal,Reciclável,Volumoso,1,1,0,0,1,1,0,1,1,0,0,0,0,0,0,0
 Móveis de plástico,Reciclável,Plástico,1,1,0,0,1,1,0,1,1,0,0,0,0,1,0,0
 Móveis de vidro,Reciclável,Vidro,1,1,0,0,1,1,0,1,1,0,0,0,0,1,0,0
-Negativos de filmes,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Negativos de filmes,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Óculos,Comum,Misto,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
 Óleo De Cozinha,Reciclável,Tóxico,1,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0
 Óleos,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Óleos automotivos,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1
 "Outros eletrodomésticos (grills, panelas à vapor, etc.)",Reciclável,Eletrônicos,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1
 "Outros eletrônicos (fones de ouvido, webcams, etc.)",Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
-"Pacotes laminados (salgadinho, café, sopa, etc.)",Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
-Palhas de aço,Reciclável,Metal,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
-Panelas,Reciclável,Metal,1,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0
-Papéis de fax (papel termo-sensível),Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Papel,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Papel alumínio,Reciclável,Metal (Alumínio),1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+"Pacotes laminados (salgadinho, café, sopa, etc.)",Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,0,0,0
+Palhas de aço,Reciclável,Metal,1,1,1,0,1,1,0,1,0,0,0,1,0,0,0,0
+Panelas,Reciclável,Metal,1,1,1,0,1,1,0,1,0,0,0,1,0,0,0,0
+Papéis de fax (papel termo-sensível),Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Papel,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Papel alumínio,Reciclável,Metal (Alumínio),1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Papel Branco,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Papel e Papelão,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Papel higiênico,Comum,Misto,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+Papel e Papelão,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Papel higiênico,Comum,Misto,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0
 Papel Misto,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Papelão,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Papelão,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Pet Azul,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Pet Cristal,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Pet Dragão,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Pet Óleo,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Pet Verde,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Pilhas,Reciclável,Tóxico,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0
+Pilhas,Reciclável,Tóxico,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0
 Placas eletrônicas de computador,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Plantas,Comum,Orgânico/Poda,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0
-Plástico,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Plástico bolha,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Plástico,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Plástico bolha,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 "Plastico Pet - Embalagens de Bebidas de até 2,5L com exceção de Lácteos",Reciclável,Plástico,1,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0
-Plásticos flexíveis,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Plásticos flexíveis,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 "Plasticos PP e PE - Embalagens de Bebidas de até 2,5L com exceção de Lácteos",Reciclável,Plástico,1,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0
 Pneus,Reciclável,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Poda,Comum,Orgânico/Poda ,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
-Potes de alimento,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Poda,Comum,Orgânico/Poda,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
+Potes de alimento,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 PP Cadeira,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,0,0,1,0,0
 PP Caixa,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,0,0,1,0,0
 Projetores Digitais,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
@@ -188,18 +188,18 @@ PVC Cano,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0
 Rádios,Reciclável,Eletrônicos,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Reatores,Reciclável,Eletrônicos,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Receivers,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
-Rejeito (não reciclável),Comum,Misto,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+Rejeito (não reciclável),Comum,Misto,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0
 Remédios,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1
-Resíduos alimentares,Comum,Orgânico,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
-Revistas,Reciclável,Papel,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Resíduos alimentares,Comum,Orgânico,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0
+Revistas,Reciclável,Papel,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Roupas,Reciclável,Têxtil,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0
-Sacolas - outras,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Sacolas - supermercado,Reciclável,Plástico,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Sacolas - outras,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Sacolas - supermercado,Reciclável,Plástico,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Secadores de cabelo,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Solventes,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Sucata,Reciclável,Volumoso,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0
-Talheres,Reciclável,Metal (Aço Inox),1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
-Tampas de papel alumínio,Reciclável,Metal (Alumínio),1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Talheres,Reciclável,Metal (Aço Inox),1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
+Tampas de papel alumínio,Reciclável,Metal (Alumínio),1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 Tapetes e carpetes,Reciclável,Têxtil,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 Teclados de computador,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Televisores de LCD/LED/Plasma,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1
@@ -211,15 +211,15 @@ Tocadores de CD/DVD/Blu-ray Automotivo,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,
 Tocadores de CD/DVD/Blu-ray Doméstico,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Tocadores de MP3 e MP4,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Tubos de água e esgoto,Reciclável,Metal (Cobre),1,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0
-Tubos de creme dental,Reciclável,Plástico,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0
-Utensílios de cerâmica para cozinha,Reciclável,Entulho,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
+Tubos de creme dental,Reciclável,Plástico,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0
+Utensílios de cerâmica para cozinha,Reciclável,Entulho,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0
 Vassouras e escovas,Reciclável,Misto,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0
 Veículos,Especial,Volumoso,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Vernizes,Especial,Tóxico,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 Vestuário,Reciclável,Têxtil,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0
 Videocassetes,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
 Videogames,Reciclável,Eletrônicos,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1
-Vidro,Reciclável,Vidro,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
+Vidro,Reciclável,Vidro,1,1,1,0,1,1,0,1,0,0,0,1,0,1,0,0
 "Vidro - Embalagens de Alimentos e Bebidas de até 2,5L com exceção de Lácteos",Reciclável,Vidro,1,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0
 Vidro Morgana,Reciclável,Vidro,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0
 Vidro Vinho,Reciclável,Vidro,1,1,0,0,1,1,0,1,0,0,0,1,0,1,0,0

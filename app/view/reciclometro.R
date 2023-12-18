@@ -40,18 +40,20 @@ group_by_peso <- function(df) {
   df %>%
     group_by(tipo, ecoponto) %>%
     summarise(peso_total = to_ton(sum(quantidade_kg))) %>%
-    mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
+    mutate(ecoponto = gsub("ECOPONTO ", "", gsub("ECOPONTO DO ", "", ecoponto)))
 }
 
 group_by_valor <- function(df) {
   df %>%
     group_by(tipo, ecoponto) %>%
     summarise(vl_total = sum(as.numeric(total_rs))) %>%
-    mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto)))
+    mutate(ecoponto = gsub("ECOPONTO ", "", gsub("ECOPONTO DO ", "", ecoponto)))
 }
 
 peso_inner_regional <- function(df, ecopontos) {
-  df %>% dplyr::inner_join(ecopontos, by = c("ecoponto" = "nome")) %>%
+  df %>%
+    mutate(ecoponto = remove_acentos_uppercase(gsub("ECOPONTO ", "", gsub("ECOPONTO ", "", gsub("ECOPONTO DO ", "", gsub(" [1-3I]{1,3}$", "", ecoponto)))))) %>%
+    dplyr::inner_join(ecopontos, by = c("ecoponto" = "nome")) %>%
     dplyr::arrange(-peso_total) %>%
     mutate(
       regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
@@ -59,7 +61,9 @@ peso_inner_regional <- function(df, ecopontos) {
 }
 
 valor_inner_regional <- function(df, ecopontos) {
-  df %>% dplyr::inner_join(ecopontos, by = c("ecoponto" = "nome")) %>%
+  df %>%
+    mutate(ecoponto = remove_acentos_uppercase(gsub("ECOPONTO ", "", gsub("ECOPONTO DO ", "", gsub(" [1-3I]{1,3}$", "", ecoponto))))) %>%
+    dplyr::inner_join(ecopontos, by = c("ecoponto" = "nome")) %>%
     dplyr::arrange(-vl_total) %>%
     mutate(
       regional = sprintf("SR %02d", as.integer(gsub("SER (.*?)", "\\1", regional)))
@@ -101,6 +105,59 @@ format_bar_plot <- function(x, show_legend=FALSE) {
 
 aba_reciclometro <- function(ns, x) {
   tagList(
+   
+    fluidRow(
+      class="d-flex w-100",
+        div(
+          class="",
+          style="width: 40%;",
+           div(
+             class="d-flex",
+             valueBox(
+               value = span("~6%", style="font-weight: 700; color: #255B54; font-size: 3rem;"),
+               subtitle = p("Metal", style="color: #255B54;"),
+               color = "white",
+               width = 6
+             ),
+             valueBox(
+               value = span("~6%", style="font-weight: 700; color: #255B54; font-size: 3rem;"),
+               subtitle = p("Papel", style="color: #255B54;"),
+               color = "white",
+               width = 6
+             ),
+           ),
+           div(
+             class="d-flex",
+             valueBox(
+               value = span("~6%", style="font-weight: 700; color: #255B54; font-size: 3rem;"),
+               subtitle = p("Plástico", style="color: #255B54;"),
+               color = "white",
+               width = 6
+             ),
+             valueBox(
+               value = span("~6%", style="font-weight: 700; color: #255B54; font-size: 3rem;"),
+               subtitle = p("Vidro", style="color: #255B54;"),
+               color = "white",
+               width = 6
+             )   
+           )
+        ),
+        div(
+            class="w-60 pl-3",
+            style="width: 60%; font-weight: 700; color: #255B54;",
+            h3("Importante"),
+            div("Aqui estão estimados os percentuais de recicláveis mais comercializados em Fortaleza. 
+                No entanto, não há registros oficiais porque se trata ainda de um mercado muito informal, 
+                composto por catadores, carroceiros, associações de catadores e deposeiros. 
+                A partir de entrevistas e do volume que eles nos informaram que comercializam, 
+                estimamos o valor de 6% de todo o material potencialmente reciclável. 
+                Nesta aba, os valores abaixo, são apenas as transações registradas por um programa 
+                do Banco Palmas e da Secretaria Municipal de Conservação e Serviços Públicos, chamado E-dinheiro. A adesão a este programa assim como 
+                a junção de dados de outros programas, quando houver, nos farão observar com mais acurácia 
+                o volume de resíduos recicláveis em Fortaleza.", style="line-height: 2.2rem; font-size: 1rem;")
+        )
+    ),
+    br(),
     fluidRow(
         valueBox(
         value = h5(textOutput(ns(sprintf("reciclometro_%s_total", x))), style="color: #255B54; font-weight: 700;"),
@@ -425,9 +482,13 @@ server <- function(id) {
     
     coleta_diaria = update_data(obsr, curr_year, last_data)
     
-    ecopontos <- dplyr::tbl(obsr, sprintf("br_iplanfor_ecopontos")) %>%
-      collect %>%
-      mutate(nome = toupper(nome))
+    # ecopontos <- dplyr::tbl(obsr, sprintf("br_iplanfor_ecopontos")) %>%
+    #   collect %>%
+    #   mutate(nome = toupper(trata_string(nome)))
+    
+    ecopontos <- utils::read.csv("data/ecopontos_fortaleza.csv")
+    ecopontos <- dplyr::mutate(ecopontos, nome = remove_acentos_uppercase(toupper(gsub(" [1-3I]{1,3}$", "", nome))))
+    ecopontos <- dplyr::distinct(ecopontos, nome, .keep_all = TRUE)
     
     coleta_diaria_por_ecoponto <- group_by_peso(coleta_diaria)
     
@@ -600,7 +661,7 @@ server <- function(id) {
 
       df_filtered %>%
         group_by(tipo, regional) %>%
-        summarise(peso_total = to_ton(sum(peso_total))) %>%
+        summarise(peso_total = sum(peso_total)) %>%
         arrange(factor(regional, levels = regional_order$regional)) %>%
         grafico_regional
       
@@ -630,7 +691,7 @@ server <- function(id) {
 
       df_filtered %>%
         group_by(tipo, regional) %>%
-        summarise(vl_total = to_ton(sum(vl_total))) %>%
+        summarise(vl_total = sum(vl_total)) %>%
         arrange(factor(regional, levels = regional_order$regional)) %>%
         grafico_vl_regional
     }) %>%
@@ -751,7 +812,7 @@ server <- function(id) {
       coleta_mensal_por_ecoponto %>%
         peso_inner_regional(ecopontos) %>%
         group_by(tipo, regional) %>%
-        summarise(peso_total = to_ton(sum(peso_total))) %>%
+        summarise(peso_total = sum(peso_total)) %>%
         arrange(factor(regional, levels = regional_order$regional)) %>%
         grafico_regional
     }) %>%
@@ -780,7 +841,7 @@ server <- function(id) {
       
       df_filtered %>%
         group_by(tipo, regional) %>%
-        summarise(vl_total = to_ton(sum(vl_total))) %>%
+        summarise(vl_total = sum(vl_total)) %>%
         arrange(factor(regional, levels = regional_order$regional)) %>%
         grafico_vl_regional
     }) %>%
@@ -928,7 +989,7 @@ server <- function(id) {
 
       df_filtered %>%
         group_by(tipo, regional) %>%
-        summarise(vl_total = to_ton(sum(vl_total))) %>%
+        summarise(vl_total = sum(vl_total)) %>%
         arrange(factor(regional, levels = regional_order$regional)) %>%
         grafico_vl_regional
     }) %>%
@@ -977,7 +1038,7 @@ server <- function(id) {
           )
       }) %>%
         dplyr::bind_rows() %>%  # Combine yearly data
-        mutate(ecoponto = stringr::str_trim(gsub("ECOPONTO", "", ecoponto))) %>%
+        mutate(ecoponto = remove_acentos_uppercase(gsub("ECOPONTO ", "", gsub("ECOPONTO DO ", "", ecoponto)))) %>%
         filter(stringr::str_detect(ecoponto, "CARTIER", negate = TRUE)) %>%
         dplyr::inner_join(ecopontos, by = c("ecoponto" = "nome")) %>%
         mutate(

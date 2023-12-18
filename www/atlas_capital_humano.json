@@ -6,7 +6,7 @@
         "#fbb81c",
         "#9417e5"
     ],
-    "backgroundColor": "transparent",
+    "backgroundColor": "#fff",
     "textStyle": {
         "fontSize": 12,
         "fontFamily": "Exo 2"

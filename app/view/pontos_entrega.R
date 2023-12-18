@@ -20,17 +20,17 @@ box::use(leaflet[...],
          ../mod/utils[trata_string]
 )
 
-filterPanel <- function (..., width = 4)
-{
-  div(class = paste0("filtro text-white col-sm-", width),
-      tags$form(class = "well", 
-                role = "complementary", ...))
-}
-
-plotPanel <- function (..., width = 8)
-{
-  div(class = paste0("grafico pt-4 col-sm-", width), role = "main", ...)
-}
+# filterPanel <- function (..., width = 4)
+# {
+#   div(class = paste0("filtro text-white col-sm-", width),
+#       tags$form(class = "well", 
+#                 role = "complementary", ...))
+# }
+# 
+# plotPanel <- function (..., width = 8)
+# {
+#   div(class = paste0("grafico pt-4 col-sm-", width), role = "main", ...)
+# }
 
 # tipo_entrega <- c("Todos", "Ecoponto", "Ilha Ecológica", "Lixeira Subterrânea", "Máquina de Reciclagem",
 #                  "Associação de Catadores", "Miniecoponto", "Tira-treco", "Coleta Domiciliar",
@@ -61,69 +61,70 @@ ponto_entrega$y <- as.numeric(ponto_entrega$y)
 #' @export
 ui <- function(id) {
   ns <- NS(id)
-  div(
-    class = "bg-secondary min-vh-100 pt-4",
     fluidPage(
+      tags$head(includeCSS("www/custom.css")),
       tagList(
         div(
-          class = "bg-secondary min-vh-100 p-5",
-          sidebarLayout(
-            filterPanel(
-              class = "text-white d-flex align-items-center flex-column pr-4",
-              div(class="position-relative w-100",
-                  img(class = "mt-n5 ml-n4 position-absolute z-index-1 top-0 left-0", src="logo_maps.png",
-                      width="230rem")
-              ),
-              h4("Já sabe o que quer fazer com",br(),
-                 "seus resíduos? Encontre aqui",br(),
-                 "o próximo destino deles!", br(), br(),
-                 class="text-center position-relative z-index-2 font-weight-bold  mb-2"
-              ),
-              div(
-                uiOutput(ns("informe_ui")),
-                h5("Quero saber onde entregar esse"),
-                selectInput(
-                  inputId = ns("lixo"),
-                  label = h5("TIPO DE RESÍDUO", class = "font-weight-bold"),
-                  choices = nomes_residuo
-                ),
-                h5("Quero informações sobre um"),
-                selectInput(
-                  inputId = ns("entrega"),
-                  label = h5("PONTO DE ENTREGA", class = "font-weight-bold"),
-                  choices = c("Todos", tipo_entrega)
-                ),
-                h5("Quero ver pontos de entrega no"),
-                selectInput(
-                  inputId = ns("bairro"),
-                  label = h5("MEU BAIRRO", class = "font-weight-bold"),
-                  choices = bairros
-                )
-              )
+          class = "maps-service d-flex justify-content-between",
+          div(
+            class = "maps-filter text-primary d-flex align-items-center flex-column",
+            div(class="position-relative w-100 logo-wave",
+                img(class = "mt-n5 ml-n4 position-absolute z-index-1", src="logo_maps.png",
+                    width="30%")
             ),
-            plotPanel(
-              leafletOutput(ns("plot"), height = "40rem"),
-              class = "plot"
+            h4("Separei meus resíduos",
+               "recicláveis. Onde posso entregá-los?",
+               br(),
+               class="title-option text-start position-relative z-index-2 font-weight-bold"
+            ),
+            div(
+              class = "filter-box",
+              uiOutput(ns("informe_ui")),
+              h5(class="subtitle-option", "Quero saber onde entregar esse"),
+              selectInput(
+                inputId = ns("lixo"),
+                label = h5("TIPO DE RESÍDUO", class = "font-weight-bold"),
+                choices = nomes_residuo,
+                width = "100%"
+              ),
+              h5(class="subtitle-option", "Quero informações sobre um"),
+              selectInput(
+                inputId = ns("entrega"),
+                label = h5("PONTO DE ENTREGA", class = "font-weight-bold"),
+                choices = c("Todos", tipo_entrega),
+                width = "100%"
+              ),
+              h5(class="subtitle-option", "Quero ver pontos de entrega no"),
+              selectInput(
+                inputId = ns("bairro"),
+                label = h5("MEU BAIRRO", class = "font-weight-bold"),
+                choices = bairros,
+                width = "100%"
+              )
             )
+          ),
+          div(
+            leafletOutput(ns("entrega_plot"), height = "95%"),
+            class = "maps-plot plot"
           )
         )
       ),
-      fluidRow(
+      div(
+        class = "text-primary suggestion-container h-100 w-100 d-flex justify-content-center align-items-center flex-column",
+        h5("Não encontrou o tipo de resíduo que quer reciclar?",br(),
+           "Envie sua sugestão!",br(),
+           class = "text-center"
+        ),
         div(
-          class = "h-100 w-100 bg-success d-flex justify-content-center align-items-center flex-column pb-4",
-          h3("Não encontrou o tipo de resíduo que",br(),
-             "quer reciclar? Envie sua sugestão!",
-             class = "text-center text-primary font-weight-bold my-4"
-          ),
+          class= "form-box",
           textInput(ns("suggestion"), label = NULL, value = "",
                     placeholder = "Digite o nome do resíduo",
                     width = "25rem"),
           actionButton(ns("send"), "Enviar", width = "8rem",
-                       class = "text-white bg-primary font-weight-bold font-italic mt-3")
+                       class = "send-btn border-0 text-white bg-primary font-weight-bold font-italic")
         )
       )
     )
-  )
 }
 
 
@@ -146,15 +147,15 @@ server <- function(id) {
         output$informe_ui <- renderUI({
           div(
             div(
-              class = "bg-white d-flex justify-content-center align-items-center rounded my-4 pt-2 px-2",
-              h5("A classe do seu resíduo é",
+              class = "dynamic-text-1 bg-white d-flex justify-content-center align-items-center rounded",
+              h5("Classe do resíduo:",
                  span(paste0(choice_classe, "!"), class = "font-weight-bold"),
                  class = "text-primary text-center"
               )
             ),
             div(
-              class = "bg-white d-flex justify-content-center align-items-center rounded my-4 pt-2 px-2",
-              h5("O seu resíduo é do tipo",
+              class = "dynamic-text-2 bg-white d-flex justify-content-center align-items-center rounded",
+              h5("Tipo do resíduo:",
                  span(paste0(choice_tipo, "!"), class = "font-weight-bold"),
                  class = "text-primary text-center",
               )
@@ -223,7 +224,7 @@ server <- function(id) {
       
     })
     
-    output$plot <- renderLeaflet({
+    output$entrega_plot <- renderLeaflet({
       req(input$bairro)
       req(input$lixo)
       req(input$entrega)
@@ -240,24 +241,45 @@ server <- function(id) {
       
       
       if(nrow(filtered_points) == 0) {
-        showModal(modalDialog(
-          title = "Este resíduo faz parte da logística reversa!",
-          "A entrega do resíduo deve ser feita na empresa onde adquiriu o produto ou na empresa onde o produto
-          foi fabricado.",
-          footer = modalButton("Retornar")
-          #footer = actionButton(ns("close"), "Retornar")
-        ))
+        if(choice_lixo$ColetaDomiciliar %in% 1) {
+          showModal(modalDialog(
+            title = "Este resíduo deve ser descartado na coleta domiciliar!",
+            "Consulte os dias e horários da coleta no seu bairro clicando na aba",
+            span(" Pontos de Coleta", class = "font-weight-bold"),
+            footer = modalButton("Voltar para os pontos de entrega")
+            #footer = actionButton(ns("close"), "Retornar")
+          ))
+        } else {
+            showModal(modalDialog(
+              title = "Este resíduo faz parte da logística reversa!",
+              "A entrega do resíduo deve ser feita na empresa onde adquiriu o produto ou na empresa onde o produto
+            foi fabricado.",
+              footer = modalButton("Retornar")
+              #footer = actionButton(ns("close"), "Retornar")
+            ))
+        }
       } else if(input$lixo != "Todos") {
         if(choice_lixo$LogisticaReversa %in% 1) {
           showModal(modalDialog(
             title = "Este resíduo faz parte da logística reversa!",
             "A entrega do resíduo pode também ser feita na empresa onde adquiriu o produto ou na empresa onde 
             o produto foi fabricado.",
-            footer = modalButton("Voltar para os pontos de coleta")
+            footer = modalButton("Voltar para os pontos de entrega")
             #footer = actionButton(ns("close"), "Retornar")
           ))
+        } else if(choice_lixo$ColetaDomiciliar %in% 1) {
+            choices_entrega <- tipo_entrega[choice_lixo[1, trata_string(tipo_entrega)] %in% 1]
+            showModal(modalDialog(
+              title = "Este resíduo pode ser descartado na coleta domiciliar!",
+              if(length(choices_entrega) > 0) "No entanto, a entrega deste produto pode ser feita",
+              ifelse(length(choices_entrega) > 1, "nos seguintes locais:", "no seguinte local:"),
+                span(paste(" ", choices_entrega, collapse = ", "), class = "font-weight-bold"),
+                ".",
+              #p(paste("-", choices_entrega)),
+              footer = modalButton("Voltar para os pontos de entrega")
+              #footer = actionButton(ns("close"), "Retornar")
+            ))
         }
-        
       }
       
       # Renderizando um mapa com latitude e longitude
