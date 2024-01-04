@@ -18,7 +18,7 @@
     font-weight: 900;
 }
 .small-box > .inner > p{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Exo 2', sans-serif;
     font-weight: 400;
 }
 .info-box .info-box-icon {
@@ -36,7 +36,7 @@
 }
 .description-text {
     font-size: 1.125rem;
-    font-family:  'Roboto', sans-serif !important; 
+    font-family:  'Exo 2', sans-serif !important; 
 }
 .card-pane-right {
     border-radius: 1rem !important;
@@ -47,20 +47,20 @@
 /* } */
 
 .card-body > p {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Exo 2', sans-serif;
 }
 .tab-pane > p {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Exo 2', sans-serif;
 }
 .list-group > p {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Exo 2', sans-serif;
 }
 
 /* Cabeçalhos */
 h1 {
     overflow: hidden;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.2vw;
 }
 h1:before,
 h1:after {
@@ -105,23 +105,174 @@ h2:after {
     margin-right: -100%;
 }
 
+.dark-mode h3, .dark-mode h4, .dark-mode h5, .dark-mode .filter-box {
+  color: #fff;
+}
+
 h4{
-  font-size: 1.6rem;
+  font-size: 1.75vw;
+  font-weight: 400;
 }
 
 h5{
-  font-size: 1.2rem;
+  font-size: 1.32vw;
+  font-weight: 400;
 }
 
 h3{
-  font-size: 1.8rem;
-}
-
-
-#coleta_em_mapas-mapa {
-    height: calc(100vh - 140px) !important;
+  font-size: 1.97vw;
+  font-weight: 400;
 }
 
 /* .small-box > .inner { */
 /*     font-size: 1.9rem !important; */
 /* } */
+
+.content-wrapper {
+  background: #fff;
+}
+
+.logo_maisfort {
+  width: 30vw;
+}
+
+.imglink img {
+  width: 22vw;
+}
+
+.maps-container {
+   padding: 0.66vw 0 0.88vw 0;
+   margin: -0.66vw -0.88vw;
+}
+
+.coleta-container {
+  height: 61vw;
+}
+
+.maps-service {
+  padding: 4.38vw 3.29vw 2.19vw 3.29vw;
+}
+
+.maps-filter {
+  padding-right: 4.38vw;
+  width: 50%;
+}
+
+.maps-plot {
+  width: 50%;
+  margin-top: 0;
+}
+  
+.filter-box {
+  width: 100%;
+}
+  
+.title-option {
+  margin-bottom: 2vw;
+}
+
+.dynamic-text-1 {
+    margin-bottom: 1vw;
+    /*padding: 0.55vw 0 0 0;*/
+  }
+
+.dynamic-text-2 {
+    margin-bottom: 1.5vw;
+    /*padding: 0.55vw 0 0 0;*/
+  } 
+  
+.logo-wave img {
+    top: 0;
+    left: 0;
+}
+
+.form-box {
+  gap: 1.64vw;
+  padding: 1.1vw 0;
+  display: flex;
+}
+
+.send-btn {
+  height: 2.52vw;
+}
+
+@media (max-width: 700px) {
+  
+  .logo_maisfort {
+    width: 90vw;
+  }
+
+  .imglink img {
+    width: 95vw;
+  }
+  
+  .maps-container {
+     width: 100vw;
+     padding: 0;
+     margin: 0;
+  }
+  
+  h3{
+    font-size: 4.1vw;
+    font-weight: 400;
+  }
+  
+  h4{
+    font-size: 3.69vw;
+    line-height: 4.92vw;
+  }
+  
+  h5{
+    font-size: 3.28vw;
+    line-height: 4.1vw;
+  }
+  
+  .coleta-container {
+    height: 120vw;
+    /*padding: 0;
+    margin: 0;*/
+  }
+  
+  .logo-wave {
+     display: none;
+  }
+  
+  .maps-plot {
+    padding-right: 0;
+  }
+  
+  .maps-service {
+    padding: 0 0 8.2vw 0;
+  }
+  
+  .filter-box {
+    width: 100%;
+  }
+  
+  .dynamic-text-1 {
+    margin: 2.05vw 0;
+    padding: 2.05vw 0 0 0;
+  }
+  
+  .dynamic-text-2 {
+    margin: 2.05vw 0;
+    padding: 2.05vw 0 0 0;
+  }
+  
+  .subtitle-option {
+    display: none;
+  } 
+  
+  .form-box {
+    gap: 2.87vw;
+    padding: 2.05vw 0;
+    width: 80vw;
+  }
+  
+  .send-btn {
+    height: 9.43vw;
+  }
+  
+}
+
+

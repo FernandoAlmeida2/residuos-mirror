@@ -71,7 +71,7 @@ server <- function(id){
       #html_output <- rmarkdown::render("rmd_files/metodologia.Rmd", output_format = "html_document")
       # Certifique-se de fornecer o caminho correto para o seu arquivo .Rmd
       html_content
-      tags$iframe(srcdoc = paste(html_content, collapse = "\n"), style = "width:100%; height:600px;")
+      tags$iframe(srcdoc = paste(html_content, collapse = "\n"), style = "width:100%; height:600px; border: none;")
   })
 })
 }

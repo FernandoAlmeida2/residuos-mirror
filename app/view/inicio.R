@@ -50,7 +50,7 @@ ui <- function(id) {
         class = "image-container d-flex justify-content-center align-items-center", # Adicionada a classe image-container e outras classes de utilidade do Bootstrap
         div(
           class = "text-center mb-5 mt-3", # Classe text-center para centralizar a imagem e mb-3 para dar uma margem abaixo da imagem
-          img(class = "img-fluid", src="obsr_maisfort.png", width = "460rem")
+          img(class = "img-fluid logo_maisfort", src="obsr_maisfort.png")
         ),
         div(
           class = "col-lg-12 d-flex flex-wrap justify-content-around mt-5", # Mudado para col-lg-12 e adicionado d-flex e justify-content-around
@@ -59,32 +59,28 @@ ui <- function(id) {
             href = "#residometro",
             onclick = "customHref('residometro')",
             img(class = "img-fluid rounded mb-2",
-                src="residuometro.png",
-                width="315rem")
+                src="residuometro.png")
           ),
           a(
             class = "imglink mr-1",
             href = "#reciclometro",
             onclick = "customHref('reciclometro')",
             img(class = "img-fluid rounded mb-2",
-                src="reciclometro.png",
-                width="315rem")
+                src="reciclometro.png")
           ),
           a(
             class = "imglink mr-1",
             href = "#coleta",
             onclick = "customHref('pontos_coleta')",
             img(class = "img-fluid rounded mb-2",
-                src="coleta.png",
-                width="315rem")
+                src="coleta.png")
           ),
           a(
             class = "imglink",
             href = "#entrega",
             onclick = "customHref('pontos_entrega')",
             img(class = "img-fluid rounded mb-2",
-                src="entrega.png",
-                width="315rem")
+                src="entrega.png")
           )                
         ),
 

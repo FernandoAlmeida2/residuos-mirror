@@ -34,6 +34,20 @@ trata_string <- function (word) {
 }
 
 #' @export
+remove_acentos_uppercase <- function (word) {
+  gsub("Á","A",
+         gsub("É","E",
+              gsub("Í","I",
+                   gsub("Ó","O",
+                        gsub("Ú","U",
+                             gsub("Ã","A",
+                                  gsub("Õ","O",
+                                       gsub("Ç","C",
+                                            gsub("Â","A",
+                                                 gsub("Ô","O",word))))))))))
+}
+  
+#' @export
 day_month_br_format <- function (date) {
   paste0(substr(date, 9, 10),"/",substr(date, 6, 7), "/",substr(date, 1, 4))
 }
@@ -74,4 +88,38 @@ month_br_text <- function (date) {
           "11" = "Novembro",
           "12" = "Dezembro"
   )
+}
+
+months_list <- c("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro",
+                 "Outubro", "Novembro", "Dezembro")
+
+#' @export
+months_array_slice <- function (max_month) {
+  
+  months_list[c(1:max_month)]
+}
+
+#' @export
+month_br_to_number <- function (month) {
+  
+  switch (month,
+          "Janeiro" = 1,
+          "Fevereiro" = 2,
+          "Março" = 3,
+          "Abril" = 4,
+          "Maio" = 5,
+          "Junho" = 6,
+          "Julho" = 7,
+          "Agosto" = 8,
+          "Setembro" = 9,
+          "Outubro" = 10,
+          "Novembro" = 11,
+          "Dezembro" = 12
+  )
+}
+
+#' @export
+number_to_month_br <- function (numeric_month) {
+  
+  months_list[numeric_month]
 }
